@@ -2,7 +2,7 @@
 \begin{figure}
 \centering
 \includegraphics[width=\linewidth]{figs/AthenaOverview_Compressed2_cropped.pdf}
-\caption{Overview of \name's workflow. First, we train the language model using the entire set of uncorrected reads for the specific dataset. Second, we perform error correction on a sub-sample from the uncorrected reads using an EC tool (\eg, Lighter or Blue) and a range of $k$-values. Third, we evaluate the perplexity of each corrected sample and decide on the best $k$-value for the next iteration. This process continues until the termination criteria are met. Finally, the complete set of reads is corrected with the best $k$-value found by \name.}	
+\caption{Overview of \name's workflow. First, we train the language model using the entire set of uncorrected reads for the specific dataset. Second, we perform error correction on a sub-sample from the uncorrected reads using an EC tool (\eg, Lighter or Blue) and a range of $k$-values. Third, we evaluate the perplexity of each corrected sample and decide on the best $k$-value for the next iteration, \ie the one corresponding to the lowest perplexity metric because error correction quality is negatively correlated with the perplexity metric. This process continues until the termination criteria are met. Finally, the complete set of reads is corrected with the best $k$-value found.}	
 \label{fig:AthenaOverview}
 \end{figure}
 \vspace{-10pt}
