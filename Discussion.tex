@@ -1,0 +1,5 @@
+\vspace{-12pt}
+\section{Discussion}
+\vspace{-5pt}
+A single iteration in \name assumes that the perplexity metric is convex in relation to the value of $k$. Intuitively, with small $k$-values, most $k$-mers will have high frequencies and hence very few will be corrected. In contrast, with high $k$-values, the number of unique $k$-mers increases, and hence no subset of $k$-mers is of high-enough fidelity. Based on the above rationale, we expect \name to perform accurately for most datasets, as hill climbing search reaches optimal solutions for convex problems. However, for non-convex spaces, a single iteration in \name may get stuck in local optima and therefore several iterations (with different intial points) is needed.  Moreover, some EC tools have a number of performance-sensitive configuration parameters, with interdependencies. For such tools, systems such as Rafiki \cite{mahgoub2017rafiki} can encode such dependencies, while relying on \name's LM to compute the corresponding performance metric, converging toward optimal parameters.
+

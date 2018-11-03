@@ -1,0 +1,7 @@
+\vspace{-12pt}
+\section{Conclusion}
+\vspace{-6pt}
+The performance of most EC tools for NGS reads is highly dependent on the proper choice of its configuration parameters, \eg $k$-value selection in \textit{k}-mer based techniques as shown in Table \ref{tb1:Lighter-Blue-Racer-Perplexity-vs-Alignment}. Using our \name suite, we target the problem of automatically tuning these parameters using language modeling techniques from the NLP domain without the need for a ground truth genome. 
+%\SCcomment{say k-mer-based EC tool instead}
+Through N-Gram and char-RNN language modeling, we validate the intuition that the EC performance can be computed quantitatively using the ``perplexity'' metric, which then guides a hill climbing-based search toward the best $k$-value. 
+We evaluate \name with 5 different real datasets, plus, with synthetically injected errors. We find that the predictive performance of the perplexity metric is maintained under all scenarios, with absolute correlation scores higher than 0.93. Further, using the perplexity metric, \name can search for and arrive at the best $k$-value, or within 0.27\% of the assembly quality obtained using brute force.

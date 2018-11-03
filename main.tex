@@ -1,0 +1,78 @@
+\documentclass[11pt,letterpaper]{article}
+
+\usepackage{tabularx,booktabs}
+\usepackage{url}
+\usepackage{fullpage}
+\usepackage{graphicx}
+\usepackage{lipsum}
+\usepackage{booktabs} % For formal tables
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{amsmath}
+\usepackage{multirow, makecell}
+\usepackage{url}
+\usepackage{flushend}
+\usepackage{comment}
+\usepackage{xspace}
+\usepackage{adjustbox}
+\usepackage{color}
+%\usepackage{caption2}
+\usepackage{enumitem}
+\usepackage{caption}
+\captionsetup{font=footnotesize}
+\usepackage[margin=1in]{geometry}
+
+\newcommand{\junk}[1]{}
+
+\newcommand{\name}{{\sc Athena}\xspace}
+
+\newcommand{\ie}{\emph{i.e.}\xspace}
+\newcommand{\eg}{\emph{e.g.}\xspace}
+\newcommand{\SCcomment}[1]{{\textcolor{red}{\bf [SC: #1]}}}
+\newcommand{\AMcomment}[1]{{\textcolor{blue}{\bf [AM: #1]}}}
+
+\begin{document}
+\thispagestyle{empty}
+
+\title{\textit{\name}: Automated Tuning of Genomic Error Correction Algorithms using Language Models}
+
+
+\author
+{
+\centering
+Mustafa Abdallah$^{*1}$  \and Ashraf Mahgoub$^{*2}$ 
+\and Saurabh Bagchi$^{1}$ \and Somali Chaterji$^{1}$ 
+\\
+		$^{1}$School of Electrical and Computer Engineering\\
+	   	$^{2}$Department of Computer Science\\
+                Purdue University\\
+{\small $^*$ The first two authors contributed equally to the work.}
+}
+
+\date{}
+
+\maketitle
+\begin{abstract}
+  \input{abstract.tex}
+\end{abstract}
+
+\input{Introduction}
+%\input{Background}
+\input{ProposedApproach}
+\input{Results}
+\input{RelatedWork}
+\input{Discussion}
+\input{Conclusion}
+
+
+%\section{Acknowledgements} 
+%This work was supported by a grant by ...
+
+\bibliographystyle{myrecomb}
+
+\bibliography{athena}
+
+\input{Appendix}
+
+\end{document}
+

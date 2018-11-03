@@ -1,0 +1,246 @@
+\subsection{Detailed Results}
+
+In this section, we show a detailed version of the results presented in table \ref{tb1:Lighter-Blue-Racer-Perplexity-vs-Alignment}. 
+%\begin{comment}
+\begin{table}
+\centering
+7
+
+%\begin{adjustbox}{\textwidth}
+\small
+\begin{tabular}{ |c|c|c|c|c|c|c| } 
+\hline
+EC Tool & {Dataset} & Tuned Parameter & \makecell{Perplexity\\(RNN)} & \makecell{Perplexity\\(N-Gram)} & \makecell{Overall Alignment\\ Rate} & Gain (\%) \\  
+ \hline
+					  %&  & k = 8 & 103.00577 & 20.41 & 97.45\% \\ 
+ 					  &  & k = 10 & 103.00579 & 20.42 & 97.45\% & -0.01\% \\ 
+ 					  & D1 & k = 15 & 103.0048 & 16.86 & 98.83\% & 87.5\% \\ 
+ 					  &  & \textbf{k = 17} & \textbf{103.004} &  \textbf{16.7}  & \textbf{98.95}\% & \textbf{96.3}\% \\ 
+ 					  &  & k = 25 &  103.00551 &  18.22 & 97.98\% & 69.5\%  
+\\\cline{2-7}
+                          %&  & k = 8 &  204.849 &  121.88 & 56.9\% \\ 
+     					  &  & k = 10 & 204.849 & 121.88 & 56.9\% & 0\%  \\ 
+						  & D2 & \textbf{k = 15} & 204.775 & 102.13 & \textbf{61.42\%} & 73.8\% \\ 
+     					  &  & k = 17 &  \textbf{204.76} &  \textbf{100.30}  & 61.15\% & \textbf{80.1}\% \\
+     					  &  & k = 25 & 204.795 & 107.37 & 59.19\%  & 69.96\%
+ \\\cline{2-7}
+ 					      %&  & k = 8 &  200.513 &  52.82 & 72.91\% \\ 
+     		\multirow{4}{*}{Lighter} &  & k = 10 & 200.513 & 52.81 & 72.91\% & 0\% \\ 
+     					  & D3 & \textbf{k = 15} & 200.432 & 33.2602 & \textbf{80.44\%} & 86.78 \% \\ 
+     					  &  & k = 17 & \textbf{200.432} & \textbf{32.74}  & 80.39\% & \textbf{95.34\%}\\ 
+     					  &  & k = 25 & 200.529 & 42.28 & 75.33\% & 65\%
+ \\\cline{2-7}                         
+                          %&  & k = 8 & 207.2942 & 25.54 & 92.16\% \\
+                           &  & k = 10 & 207.2945 & 25.53 & 92.14\% & 0\%\\
+                           & D4 & k = 15 & 206.248 & 18.07 & 93.72\% & 86.14 \%\\
+                           &  & \textbf{k = 17} & \textbf{204.899} & \textbf{17.86} & \textbf{93.95}\% & 89.87\%\\
+                             %& D4 & k-mer Length=20 & 205.634 & 17.86 & 6.31\%	& 91.70\%	& 1.99\% & 93.69\% \\
+                             &  & k = 25 & 206.848 & 18.25 &  93.13\% & \textbf{89.9} \%
+\\\cline{2-7}                            
+                           % &  & k = 8 & 193.121 & 6.44 & 91.92\% \\
+                            &  & k = 10 & 193.121 & 6.44 & 91.92\% & 0\%\\
+                            & D5 & k = 15 & 193.052 & 5.45 & 92.11\% & 73.12\% \\
+                            &  & \textbf{k = 17} & 193.054  &  \textbf{5.354}  & \textbf{92.15}\% & 81.7\% \\
+                        %& D5 & k-mer Length=20 & \textbf{193.051} & 5.354 & 7.87\%	& 87.71\%	& 4.42\% & 92.13\% \\    
+                 &  & k = 25 & \textbf{193.052} & 5.357 & 92.09\% & \textbf{83.8}\%\\                 
+  \hline
+  \end{tabular}
+%\end{adjustbox}
+%\end{center}
+\caption {Detailed results for our 5 datasets using Lighter: a comparison between finding best value of $k$ using \name variants vs exhaustive seraching. These results are consistent with the reported results by Lighter's authors (see Figure 5 in \cite{song2014lighter}).}
+\label{tb1:Lighter-Perplexity-vs-Alignment}
+\end{table}
+%\end{comment}
+
+%\begin{comment}
+
+\begin{table}
+\centering
+%\begin{adjustbox}{\textwidth}
+\small
+\begin{tabular}{ |c|c|c|c|c|c|c| } 
+\hline
+EC Tool & {Dataset} & Tuned Parameter & \makecell{Perplexity\\(RNN)} & \makecell{Perplexity\\(N-Gram)} & \makecell{Overall Alignment\\ Rate} & Gain (\%) \\ 
+ \hline
+						 &  & \textbf{k = 20} &  206.033 &  \textbf{16.52} & \textbf{99.53}\% & \textbf{99\%} \\ 
+					   & D1 & k = 25 &  \textbf{206.026} &  16.62 & 99.29\% & 98.6\%\\ 
+					   &  & k = 30 &  206.0361 &  16.96 & 98.65\% & 87.6\% 
+ \\\cline{2-7}
+ %D2 & 10 & 204.888 & 168.75 & 5.02\%	& 46.58\%	& 48.40\%  & 55.31\% \\ 
+ \multirow{4}{*}{Blue} &  & \textbf{k = 20} & \textbf{204.846} & \textbf{119.1738} & \textbf{57.44\%} & \textbf{4.61\%} \\ 
+ 					   & D2 & k = 25 &  204.848 & 120.5232 & 57.09\% & 1.7\% \\ 
+ 					   &  & k = 30 & 204.847 & 238.98 & 57\%  & 1.24\%  
+ \\\cline{2-7}
+ %D3 & 10 & 200.481 & 100.98 &  31.51 \%	& 67.01\%	& 1.48\% & 68.49\% \\ 
+ 					  &  & \textbf{k = 20} & \textbf{200.46}  & \textbf{29.89} & \textbf{84.17}\% & \textbf{99.2\%} \\ 
+  					  & D3 & k = 25 & 200.49   & 32.39 & 81.62\% & 97.7\% \\ 
+  					  &  & k = 30 & 200.51 & 49.22 & 73.84\% & 13.17 \%
+ \\\cline{2-7}                     
+%                       & D4 & k-mer Length=15 & 207.155 & 48.18 & 5.70\%	& 92.25\%	& 2.05\% & 94.30\% \\
+                        &  & \textbf{k = 20} & \textbf{207.179} & \textbf{46.6} & \textbf{95.31\%} & \textbf{98.5\%} \\
+                       & D4 & k = 25 & 207.228 & 47.59 & 94.64\% & 98.4\% \\  
+                &  & k = 30 & 207.284 & 48.69 & 93.97\%   & 96.5\%     
+                         
+%                   & D5 & k-mer Length=15 & 192.785 & 16.16 & 8.01\%	& 87.54\%	& 4.45\% & 91.99\% \\
+\\\cline{2-7}
+                &  & \textbf{k = 20} & \textbf{192.804} & \textbf{15.67} & \textbf{92.33}\% & 88.9\% \\   
+               & D5 & k = 25 & 192.8044 & 15.72 & 92.28\% & \textbf{91.2\%} 
+\\               
+                &  & k = 30 & 192.8077 & 15.79 & 92.22\%  & 92.08\%
+\\           
+  \hline
+  \end{tabular}
+%\end{adjustbox}
+%\end{center}
+\caption {Detailed results for our 5 datasets using Blue}
+\label{tb1:Blue-Perplexity-vs-Alignment}
+\end{table}
+%\end{comment}
+
+%begin{comment}
+
+\begin{table}
+\centering
+%\begin{adjustbox}{\textwidth}
+\small
+\begin{tabular}{ |c|c|c|c|c|c|c| } 
+\hline
+EC Tool & {Dataset} & Tuned Parameter & \makecell{Perplexity\\(RNN)} & \makecell{Perplexity\\(N-Gram)} & \makecell{Overall Alignment\\ Rate} & Gain(\%) \\ 
+ \hline
+  %&  & GL = 1M & 206.120 & 45.33 &  85.01\%  & -1253.9\% \\ 
+ 						 & D1 & \textbf{GL = 4.7M} & \textbf{206.033} & \textbf{16.6} & \textbf{99.26}\% & \textbf{84.8\%} 
+ \\ 						  
+						 &  & GL = 20M & 206.036 & 16.9 &  98.85\% &  80.3\% \\ 
+ 						 &  & GL = 30M & 206.0357 & 16.99 & 98.82\% & 77.6\%
+ \\\cline{2-7}
+   					%	 &  & GL = 1M & 204.839 & 126.16  & 58.66\% & -72.2\% \\
+  						 & D2 & \textbf{GL = 4.7M} & \textbf{204.7520} & \textbf{85.14}  & \textbf{81.15}\% & 92.9\% \\
+                         &  & GL = 7M & 204.7564 & 85.2  & 81.13\% & \textbf{93\%}\\
+                         &  & GL = 30M & 204.775 & 88.24  & 79.24\% & 91.9\%
+  \\\cline{2-7}                       
+             % &  & GL = 1M & \textbf{200.411} & 56.86  & 71.22\% & -388\% \\
+               \multirow{4}{*}{Racer}          &  & \textbf{GL = 3.7M} & 200.4552 & \textbf{30.4}  & \textbf{84.11}\% & 88.27\% \\                                               
+                         & D3 & GL = 18M & 200.4603 & 33.87 & 80.97\% & 80.21\% \\
+                         &  & GL = 30M & 200.4626 & 34.46  & 80.79\%b & 75.74\%
+  \\\cline{2-7}                       
+               %          &  & GL = 1M & 206.978 & 19.64 & 93.86\% & 48.3\% \\
+                         & D4 & \textbf{GL = 4.2M} & \textbf{206.942} & \textbf{17.32} & \textbf{95.33}\% & \textbf{97\%} \\
+                         &  & GL = 20M & 206.9494 & 17.51 & 95.04\% & 96.5\% \\
+                         &  & GL = 30M & 206.9489 & 17.53 & 95.01\% & 95.9\%
+  \\\cline{2-7}                       
+                %         &  & GL = 1M & 193.0461 & 5.46  & 90.91\% & -232.8\% \\
+                         
+                         & D5 & \textbf{GL = 4.2M} & 193.0454 & \textbf{4.77} & \textbf{92.29}\% & 81.63\%\\
+                         &  & GL = 20M & \textbf{193.0451} & 4.78  & 92.28\% & 80.5\% \\
+                         &  & GL = 30M & 193.0479 & 4.79  & 92.26\% & 81.9\% \\
+  \hline
+  \end{tabular}
+%\end{adjustbox}%
+%\end{center}
+\caption {Detailed results for our 5 datasets using Racer.}
+\label{tb1:Racer-Perplexity-vs-Alignment}
+\end{table}
+%\end{comment}
+
+\begin{comment}
+\begin{table}
+\begin{center}
+%\begin{adjustbox}{\textwidth}
+\small
+\begin{tabular}{ |c|c|c|c|c|c| } 
+\hline
+EC Tool & {Dataset} & Tuned Parameter & {perplexity (RNN)} & {perplexity (N-Gram)} & {overall alignment rate} \\ 
+ \hline
+					  %&  & k = 8 & 103.00577 & 20.41 & 97.45\% \\ 
+ 					  &  & k = 10 & 103.00579 & 20.42 & 97.45\% \\ 
+ 					  & D1 & k = 15 & 103.0048 & 16.86 & 98.83\% \\ 
+ 					  &  & \textbf{k = 17} & \textbf{103.004} &  \textbf{16.7}  & \textbf{98.95}\% \\ 
+ 					  &  & k = 25 &  103.00551 &  18.22 & 97.98\%  
+\\\cline{2-6}
+                          %&  & k = 8 &  204.849 &  121.88 & 56.9\% \\ 
+     					  &  & k = 10 & 204.849 & 121.88 & 56.9\% \\ 
+						  & D2 & \textbf{k = 15} & 204.775 & 102.13 & \textbf{61.42\%} \\ 
+     					  &  & k = 17 &  \textbf{204.76} &  \textbf{100.30}  & 61.15\% \\
+     					  &  & k = 25 & 204.795 & 107.37 & 59.19\% 
+ \\\cline{2-6}
+ 					      %&  & k = 8 &  200.513 &  52.82 & 72.91\% \\ 
+     		\multirow{4}{*}{Lighter} &  & k = 10 & 200.513 & 52.81 & 72.91\% \\ 
+     					  & D3 & \textbf{k = 15} & \textbf{200.432} & 33.2602 & \textbf{80.44\%} \\ 
+     					  &  & k = 17 & 200.432 & \textbf{32.74}  & 80.39\% \\ 
+     					  &  & k = 25 & 200.529 & 42.28 & 75.33\% 
+ \\\cline{2-6}                         
+                          %&  & k = 8 & 207.2942 & 25.54 & 92.16\% \\
+                           &  & k = 10 & 207.2945 & 25.53 & 92.14\% \\
+                           & D4 & k = 15 & 206.248 & 18.07 & 93.72\% \\
+                           &  & \textbf{k = 17} & \textbf{204.899} & \textbf{17.86} & \textbf{93.95}\% \\
+                             %& D4 & k-mer Length=20 & 205.634 & 17.86 & 6.31\%	& 91.70\%	& 1.99\% & 93.69\% \\
+                             &  & k = 25 & 206.848 & 18.25 &  93.13\% 
+\\\cline{2-6}                            
+                           % &  & k = 8 & 193.121 & 6.44 & 91.92\% \\
+                            &  & k = 10 & 193.121 & 6.44 & 91.92\% \\
+                            & D5 & k = 15 & \textbf{193.052} & 5.45 & 92.11\% \\
+                            &  & \textbf{k = 17} & 193.054  & \textbf{5.354}  & \textbf{92.15}\% \\
+                        %& D5 & k-mer Length=20 & \textbf{193.051} & 5.354 & 7.87\%	& 87.71\%	& 4.42\% & 92.13\% \\    
+                 &  & k = 25 & 193.052 & 5.357 & 92.09\% \\                 
+  \hline
+						 &  & \textbf{k = 20} &  206.033 &  \textbf{16.52} & \textbf{99.53}\% \\ 
+					   & D1 & k = 25 &  \textbf{206.026} &  16.62 & 99.29\% \\ 
+					   &  & k = 30 &  206.0361 &  16.96 & 98.65\%  
+ \\\cline{2-6}
+ %D2 & 10 & 204.888 & 168.75 & 5.02\%	& 46.58\%	& 48.40\%  & 55.31\% \\ 
+ \multirow{4}{*}{Blue} &  & \textbf{k = 20} & \textbf{204.846} & \textbf{119.1738} & \textbf{57.44}\% \\ 
+ 					   & D2 & k = 25 &  204.848 & 120.5232 & 57.09\% \\ 
+ 					   &  & k = 30 & 204.847 & 238.98 & 57\% 
+ \\\cline{2-6}
+ %D3 & 10 & 200.481 & 100.98 &  31.51 \%	& 67.01\%	& 1.48\% & 68.49\% \\ 
+ 					  &  & \textbf{k = 20} & \textbf{200.46}  & \textbf{29.89} & \textbf{84.17}\% \\ 
+  					  & D3 & k = 25 & 200.49   & 32.39 & 81.62\% \\ 
+  					  &  & k = 30 & 200.51 & 49.22 & 73.84\%
+ \\\cline{2-6}                     
+%                       & D4 & k-mer Length=15 & 207.155 & 48.18 & 5.70\%	& 92.25\%	& 2.05\% & 94.30\% \\
+                        &  & \textbf{k = 20} & \textbf{207.179} & \textbf{46.6} & \textbf{95.31}\% \\
+                       & D4 & k = 25 & 207.228 & 47.59 & 94.64\% \\  
+                &  & k = 30 & 207.284 & 48.69 & 93.97\%       
+                         
+%                   & D5 & k-mer Length=15 & 192.785 & 16.16 & 8.01\%	& 87.54\%	& 4.45\% & 91.99\% \\
+\\\cline{2-6}
+                &  & \textbf{k = 20} & \textbf{192.804} & \textbf{15.67} & \textbf{92.33}\% \\   
+               & D5 & k = 25 & 192.8044 & 15.72 & 92.28\%
+\\               
+                &  & k = 30 & 192.8077 & 15.79 & 92.22\% 
+\\
+  \hline
+   &  & GL = 1M & 206.120 & 45.33 &  85.01\% \\ 
+ 						 & D1 & \textbf{GL = 4.7M} & \textbf{206.033} & \textbf{16.6} & \textbf{99.26}\%
+ \\ 						  
+						 &  & GL = 20M & 206.036 & 16.9 &  98.85\% \\ 
+ 						 &  & GL = 30M & 206.0357 & 16.99 & 98.82\% 
+ \\\cline{2-6}
+   						 &  & GL = 1M & 204.839 & 126.16  & 58.66\% \\
+  						 & D2 & \textbf{GL = 4.7M} & \textbf{204.7520} & \textbf{85.14}  & \textbf{81.15}\% \\
+                         &  & GL = 7M & 204.7564 & 85.2  & 81.13\% \\
+                         &  & GL = 30M & 204.775 & 88.24  & 79.24\% 
+  \\\cline{2-6}                       
+%             & D3 & Genome Length = 1M & 200.411 & 56.86  & 28.78\% & 69.31\%  & 1.91\% & 71.22\% \\
+               \multirow{4}{*}{Racer}          &  & \textbf{GL = 3.7M} & \textbf{200.4552} & \textbf{30.4}  & \textbf{84.11}\% \\                                               
+                         & D3 & GL = 18M & 200.4603 & 33.87 & 80.97\% \\
+                         &  & GL = 30M & 200.4626 & 34.46  & 80.79\% 
+  \\\cline{2-6}                       
+                         &  & GL = 1M & 206.978 & 19.64 & 93.86\% \\
+                         & D4 & \textbf{GL = 4.2M} & \textbf{206.942} & \textbf{17.32} & \textbf{95.33}\% \\
+                         &  & GL = 20M & 206.9494 & 17.51 & 95.04\% \\
+                         &  & GL = 30M & 206.9489 & 17.53 & 95.01\% 
+  \\\cline{2-6}                       
+                         &  & GL = 1M & 193.0461 & 5.46  & 90.91\% \\
+                         
+                         & D5 & \textbf{GL = 4.2M} & 193.0454 & \textbf{4.77} & \textbf{92.29}\% \\
+                         &  & GL = 20M & \textbf{193.0451} & 4.78  & 92.28\% \\
+                         &  & GL = 30M & 193.0479 & 4.79  & 92.26\% \\
+\hline
+\end{tabular}
+%\end{adjustbox}
+\end{center}
+\caption {Results for our five data sets using Lighter, Blue, and RACER correction tools: a comparison between finding best value of $k$ using our proposed approaches (i.e., N-Gram and Char-RNN language models perplexities), for Lighter and Blue, and Genome Length (for RACER) and the ground truth using the Alignment Rate metric found through exhaustive search. We find either the optimal value or within 0.27\% of the theoretical best.}
+\label{tb1:Lighter-vs-Blue-vs-Racer-Perplexity-vs-Alignment}
+\end{table}
+\end{comment}
