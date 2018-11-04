@@ -312,7 +312,7 @@ In addition, we see that \name can be applied to a different configuration param
 \vspace{-12pt}
 \subsection{Comparison with Self-tuning EC Tool}
 \vspace{-5pt}
-Here, we compare \name with the EC tool, Fiona \cite{schulz2014fiona}, which estimates parameters automatically. The purpose of this comparison is to show that \name can tune $k$-mer-based approaches (\eg, RACER) to achieve comparable performance to suffix array-based approaches (\eg, Fiona), reducing the gap between the two approaches. \cite{yang2012survey} and \cite{molnar2014correcting} show a similar comparison between different EC approaches concluding that the automatic selection of configuration parameters, based on the datasets, is crucial for EC performance.
+Here, we compare \name with the EC tool, Fiona \cite{schulz2014fiona}, which estimates parameters automatically. The purpose of this comparison is to show that \name can tune $k$-mer-based approaches (\eg RACER) to achieve comparable performance to suffix array-based approaches (\eg Fiona), reducing the gap between the two approaches. \cite{yang2012survey} and \cite{molnar2014correcting} show a similar comparison between different EC approaches concluding that the automatic selection of configuration parameters, based on the datasets, is crucial for EC performance.
  Table \ref{tbl:Fiona_5_datasets_Correlation_N_Gram} presents the overall alignment rate for our 5 evaluation datasets, calculated after doing correction by Fiona. We notice that RACER (when tuned with \name) outperforms automatic tuning by Fiona in 3 of the 5 datasets, while they were equal in one dataset using RACER (the most accurate EC tool) with GL tuning. Finally, Fiona is only better on $D_{5} $ by $0.05\%$, which is not significant.  
 
 

@@ -3,7 +3,7 @@
 
 \noindent{\bf Error Correction and Evaluation} 
 
-The majority of error correction tools share the following intuition: high-fidelity sequences (or, solid sequences) can be used to correct errors in low-fidelity sequences (or, in-solid sequences). However, they vary significantly in the way they differentiate between solid and in-solid sequences. For example, \citep{yang2010reptile} corrects genomic reads containing insolid $k$-mers using a minimum number of edit operations such that these reads contain only solid $k$-mers after correction.
+The majority of error correction tools share the following intuition: high-fidelity sequences (or, solid sequences) can be used to correct errors in low-fidelity sequences (or, in-solid sequences). However, they vary significantly in the way they differentiate between solid and in-solid sequences. For example, \cite{yang2010reptile} corrects genomic reads containing insolid $k$-mers using a minimum number of edit operations such that these reads contain only solid $k$-mers after correction.
 % SB (1/28/18): Give some representative examples here (1-2 sentences). 
 % Mustafa(1/28): done
 The evaluation of \textit{de novo} sequencing techniques rely on likelihood-based metrics such as ALE and CGAL, without relying on the availability of a reference genome. On the other hand, comparative sequencing or re-sequencing, such as to study structural variations among two genomes, do have reference genomes available. 
@@ -19,7 +19,7 @@ To increase the accuracy of detecting words in speech recognition, language mode
 \noindent{\bf N-Gram-Based Language Modeling}. 
 This type of modeling is word-based.
 % , which means that each read has to be divided into several segments before we train such a model.
-The main task that N-Gram based models \citep{brown1992class} have been used for is to estimate the likelihood of observing a word \textit{$W_i$}, given the set of previous words ${W_0, \cdots W_{i-1}}$, estimated using the following equation:
+The main task that N-Gram based models \cite{brown1992class} have been used for is to estimate the likelihood of observing a word \textit{$W_i$}, given the set of previous words ${W_0, \cdots W_{i-1}}$, estimated using the following equation:
 \newline
 \begin{equation}
 \begin{aligned}
@@ -36,10 +36,10 @@ Where \textit{n} represents the number of history words the model uses to predic
 
 \noindent{\bf Char-RNN-Based Language Modeling}.
 Recurrent neural network (RNN) is a very popular class of neural networks for dealing with sequential data, frequently encountered in the NLP domain. The power of RNN is that each neuron or unit can use its internal state memory to save information from the previous input and use that state, together with the current input, to determine what the next output should be. %In this context, we utilize this property to capture long character sequences and relations such as Genome Sequencing with similar way of Language modeling problems in machine learning applications.
-Character-level RNN models, \textit{char-RNN} for short, operate by taking a chunk of text and modeling the probability distribution of the next character in the sequence, given a sequence of previous characters. This then allows it to generate new text, one character at a time~\citep{graves2013generating}.
+Character-level RNN models, \textit{char-RNN} for short, operate by taking a chunk of text and modeling the probability distribution of the next character in the sequence, given a sequence of previous characters. This then allows it to generate new text, one character at a time~\cite{graves2013generating}.
 As shown in Fig. \ref{fig:RNN}, RNNs consist of three main layers: Input Layer, Hidden Layer, and Output Layer.
 First, Input Layer takes $ x_{t} $ vector, which is input at a time step $t$, usually a one-hot encoding vector of the $ t^{th} $ word or character of the input sentence. 
-Second, Hidden Layer consists of the hidden state at the same time step $ s_{t} $, which represents the memory of this network. It is calculated as a non-linear function \textit{f} (\eg, tanh ) of the previous hidden state $ s_{t-1} $ and the input at current time step $ x_{t} $ with the following relation: \begin{equation}
+Second, Hidden Layer consists of the hidden state at the same time step $ s_{t} $, which represents the memory of this network. It is calculated as a non-linear function \textit{f} (\eg tanh ) of the previous hidden state $ s_{t-1} $ and the input at current time step $ x_{t} $ with the following relation: \begin{equation}
 s_{t} = f(U x_{t} + W s_{t-1}).
 \end{equation}
 where, $W$ is a matrix that consists of hidden weights of this hidden layer.
@@ -55,7 +55,7 @@ Backpropagation was used to train the RNN to update weights and minimize the err
 Each output vector at each time step also has the same dimension.  
 
 \noindent{\bf Perplexity of the Language Model}. 
-Perplexity is a measurement of how well a probability distribution predicts a sample. In NLP, perplexity is one of the most effective ways of evaluating the goodness of fit of a language model since a language model is a probability distribution over entire sentences of text~\citep{azzopardi2003investigating}. For example, 5 per word perplexity of a model translates to the model being as confused on test data as if it had to select uniformly and independently from 5 possibilities for each word. Thus, a lower perplexity indicates that language model is better at making predictions.
+Perplexity is a measurement of how well a probability distribution predicts a sample. In NLP, perplexity is one of the most effective ways of evaluating the goodness of fit of a language model since a language model is a probability distribution over entire sentences of text~\cite{azzopardi2003investigating}. For example, 5 per word perplexity of a model translates to the model being as confused on test data as if it had to select uniformly and independently from 5 possibilities for each word. Thus, a lower perplexity indicates that language model is better at making predictions.
 For an N-Gram language model, perplexity of a sentence is the inverse probability of
 the test set, normalized by the number of words. It is clear from \eqref{eq:4} that minimizing perplexity is the same as maximizing the probability of the observed set of $m$ words from $W_{1}$ to $W_{m}$.
 

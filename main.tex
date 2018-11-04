@@ -21,15 +21,19 @@
 \usepackage{caption}
 \captionsetup{font=footnotesize}
 \usepackage[margin=1in]{geometry}
+\usepackage[hidelinks,colorlinks=false]{hyperref}
+\usepackage[hang,flushmargin]{footmisc} 
 
 \newcommand{\junk}[1]{}
 
 \newcommand{\name}{{\sc Athena}\xspace}
 
-\newcommand{\ie}{\emph{i.e.}\xspace}
-\newcommand{\eg}{\emph{e.g.}\xspace}
+\newcommand{\ie}{\emph{i.e.,}\xspace}
+\newcommand{\eg}{\emph{e.g.,}\xspace}
 \newcommand{\SCcomment}[1]{{\textcolor{red}{\bf [SC: #1]}}}
 \newcommand{\AMcomment}[1]{{\textcolor{blue}{\bf [AM: #1]}}}
+\definecolor{ballblue}{rgb}{0.13, 0.67, 0.8}
+\newcommand{\SBcomment}[1]{{\textcolor{ballblue}{\bf [SB: #1]}}}
 
 \begin{document}
 \thispagestyle{empty}
