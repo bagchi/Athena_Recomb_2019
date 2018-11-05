@@ -7,7 +7,7 @@ The perplexity metric is based on using a language model trained on the entire o
 % SB (11/4/18): We are not consistent in the casing ``Perplexity Metric'' ``Perplexity metric'' and ``perplexity metric''. Be consistent. I do not have a strong opinion, but mildly prefer the second one. 
 %\SCcomment{explain the intuition for using the perplexity metric on the original uncorrected data, it is a sub-sample of the uncorrected data, right? if so, say how you sub-sample}
 %\AMcomment{Language model is trained on original uncorrected data but perplexity is calculated on a sub-sample of corrected reads, we use a sample of 50K/10M reads on RNN.}
-The perplexity metric measures how well a learned LM can predict the next element in an input stream. Suppose the input stream is $H$ and the next element is $e$. Then, the perplexity metric is inversely proportional to the probability of seeing ``e'' in the stream, given the history $H$ for the learned model.
+The perplexity metric measures how well a learned Language Model (LM) can predict the next element in an input stream. Suppose the input stream is $H$ and the next element is $e$. Then, the perplexity metric is inversely proportional to the probability of seeing ``e'' in the stream, given the history $H$ for the learned model.
 This method works because there is a high negative correlation of the perplexity metric with both EC metrics---Alignment Rate and EC Gain.
 Given this anti-correlation, we can rely on the perplexity metric as an evaluation function, and apply a simple search technique (\textit{e.g.}, hill climbing) to find the best $k$-value for a given dataset. In this description, for simplicity of exposition, we use the $k$-value in $k$-mer based techniques as an example of \name-tuned configuration parameter. However, \name can tune any other relevant configuration parameter in error correction algorithms and we experimentally show the behavior with another parameter in the RACER tool. 
 Figure \ref{fig:PPL_Simple_Example} shows an example how perplexity can evaluate the likelihood of a sequence of $k$-mers using their frequencies and contextual dependencies. In this example, we notice that the corrected read set (\ie on the right) has a considerably lower perplexity value (15.2), relative to the erroneous set (77.72). This is an example of our intuition that the perplexity metric reflects the correctness of the read dataset is validated through a negative relationship.
@@ -15,41 +15,57 @@ Figure \ref{fig:PPL_Simple_Example} shows an example how perplexity can evaluate
 % SB (11/4/18): Worked till here.
 
 \subsection{Application of Language Models}
-We investigate the validity of our approach by training 2 LM variants: 
-\begin{enumerate}
-\item \textbf{N-Gram Language Models}: Using the SRILM toolkit~\cite{Stolcke02srilm--}, we train an N-Gram model, which is word-based, from the input set of reads before correction. This N-Gram model needs word-segmentation of the input read as a preprocessing phase. Then, we use this trained LM to evaluate the quality of reads after error correction. SRILM is an open source toolkit that supports building statistical N-Gram LMs, in addition to evaluating the likelihood of new sequences using the perplexity metric. 
+We use two different LMs in \name, which gives two different variants. We describe each model next.
+
+\noindent \textbf{N-Gram Language Models}: % Using the SRILM toolkit~\cite{Stolcke02srilm--},
+% SB (11/4/18): Implementation specific details should come later. 
+We train an N-Gram model, which is word-based, from the input set of reads before correction. This N-Gram model needs word-segmentation of the input read as a preprocessing phase. Then, we use this trained LM to evaluate the quality of reads after error correction.
+% SRILM is an open source toolkit that supports building statistical N-Gram LMs, in addition to evaluating the likelihood of new sequences using the perplexity metric. 
 %\SCcomment{likelihood of new sequences, you mean?}
 % Mus: Done.
 
-\item \textbf{RNN Language Models}: The second technique is RNN-based, using different RNN architectures, \eg standard RNNs, LSTMs, and GRUs.
-These models can be trained either as word-based models or character-based models. We train them as character-based models to avoid segmentation as a preprocessing phase, in contrast to N-Gram models. We build over the TensorFlow platform for our implementation \cite{45381}.
+\noindent \textbf{RNN Language Models}: The second technique is RNN-based, using different RNN architectures, \eg standard RNNs, LSTMs, and GRUs.
+These models can be trained either as word-based models or character-based models. We train them as character-based models to avoid having to make the decision about how to segment the genomic string, as we have to do for the N-Gram model.
+% We build over the TensorFlow platform for our implementation \cite{45381}.
+% SB (11/4/18): Moved to result section. 
 %\SCcomment{is it just using TensorFlow's N-gram model or do we implement something on top that we can release. This community likes new open-source implementations.}
 %\AMcomment{We can open-source \name itself after acceptance}
-\end{enumerate}
 
-\noindent{Although N-Gram LMs are much faster compared to RNN-based models, they still have the requirement of splitting a read into words of specific length.}
+\SBcomment{Expand on these two approaches. They are a key part of our novelty story. 
+For each technique: 
+(1) Basic approach - the Recomb reviewer will not be familiar with this. 
+(2) What we have to do to adapt it to our problem space. 
+(3) What are the other design choices possible and why we did not make them.}
+
+Although N-Gram LMs are much faster compared to RNN-based models, they still have the requirement of splitting a read into words of specific length.
 %\SCcomment{is this pre-processing phase time-consuming or what is the exact problem, specify.}
 %\AMcomment{This phase is not time consuming at all, but deciding the word length is somewhat related to finding the k-mer size (see section 3.1 in "A careful reader")} ok
 Further, RNN-based models have much lower memory footprint and storage requirements relative to N-Gram. This is because N-Gram models need to store conditional probabilities in large tables (average size of 0.6-1.1 GB across the 5 datasets), while RNNs only need to store the network architecture and  weights (average size of 3-5 MB across the 5 datasets). 
 %\SCcomment{remember to fill out the XXX}
 % SB (1/28/18): We do not say how we break this circular problem. That can be mentioned here or just above when we introduced the N-gram based model.
-From our results, we see that both \name variants efficiently guide the EC algorithm toward selecting the most appropriate configuration parameters (\eg $k$). 
+% From our results, we see that both \name variants efficiently guide the EC algorithm toward selecting the most appropriate configuration parameters (\eg $k$). 
 
 \subsection{Search through the Parameter Space}
 Our objective is to find the best $k$-value that will minimize the perplexity of the corrected dataset. We assume that perplexity can be modeled by the following function.
 \begin{equation}
-Perplexity = f_{n}(LM, D_0, k)
+Perplexity = f_{n}(LM, D_C, k)
 \end{equation} 
-Where LM: trained language model, $D_0$: corrected genomic dataset ($S'_c$ in Figure 1), and $k$: the configuration parameter we wish to tune.
-$f_{n}$ is a discrete function as values of $k$ are discrete and the derivative of this function is unknown. Therefore, a gradient-based optimization technique will not work. Therefore, we use a simple hill-climbing technique to find the value of $k$ that gives the minimum value of $f_n$, for the given LM and $D_0$.
+Here LM: trained language model, $D_C$: corrected genomic dataset, and $k$: the configuration parameter we wish to tune.
+$f_{n}$ is a discrete function as values of $k$ are discrete and therefore, its derivative is not computable. Therefore, a gradient-based optimization technique will not work. Hence, we use a simple hill-climbing technique to find the value of $k$ that gives the minimum value of $f_n$, for the given LM and $D_C$.
+\begin{equation}
+  k_{opt} = \argmin_{k_i} f_{n}(LM, D_C, k_i)
+\end{equation} 
 
-The following pseudo-code describes the steps used for finding the best $k$-value for a given dataset. We begin by training a language model on the original uncorrected read set ($D_o$). Second, we assume that the best value of $k$ lies in a range from $A$ to $B$ (initially set to either the tool's recommended range, or between 1 and $L$, where $L$ is the read size).
+The following pseudo-code describes the steps used for finding the best $k$-value for a given dataset. We start with Algorithm 1, which invokes Algorithm 2 multiple times, each time with a different starting value. We begin by training a language model on the original uncorrected read set ($D_0$). Second, we assume that the best value of $k$ lies in a range from $A$ to $B$ (initially set to either the tool's recommended range, or between 1 and $L$, where $L$ is the read size).
 % SB (1/28/18): What is L?
-We apply an existing EC algorithm (\eg Lighter or Blue) with different initial values $(k_{0}$,..., $k_{m}) \in (A, B)$, to avoid getting stuck in local minima, going through multiple iterations for a given initial value. We evaluate the perplexity for the corrected dataset with current value of $k$ and its neighbors ($k+\delta$ and $k-\delta$). In each iteration, we apply hill-climbing search to identify the next best value of $k_{i}$ for the following iteration. The algorithm terminates whenever the perplexity relative to $k_i$ is less than the perplexities of both its neighbors or the maximum number of (user-defined) iterations is reached. However, all shown results are with respect to only one initial value (\textit{i.e.}, one iteration). This is intended to show the EC gain of just one iteration, achieving performance within 0.27\% of an exhaustive search across the whole range of $k$ values. %Also with many iterations the solution becomes similar to exhaustive searching.   
+We apply an existing EC algorithm (Lighter, Blue, or RACER in our evaluation) with different initial values $(k_{0}$,..., $k_{m}) \in (A, B)$, to avoid getting stuck in a local minimum, going through multiple iterations for a given initial value. We evaluate the perplexity for the corrected dataset with current value of $k$, $k_i$, and its neighbors ($k_i-\delta$ and $k_i+\delta$). In each iteration, we apply hill-climbing search to identify the next best value of $k_{i}$ for the following iteration. The algorithm terminates whenever the perplexity relative to $k_i$ is less than the perplexities of both its neighbors or the maximum number of (user-defined) iterations is reached. However, all shown results are with respect to only one initial value (\textit{i.e.}, one iteration).
+% SB (11/4/18): The previous sentence is misleading. You do not mean only one iteration of the loop that you mention in the previous sentence. Instead you mean that m=1 in k1, k2, ..., km. Right?
+This is intended to show the EC gain of just one iteration, achieving performance within 0.27\% of an exhaustive search across the whole range of $k$ values. %Also with many iterations the solution becomes similar to exhaustive searching.   
 %range under investigation is smaller than a user defined value $\alpha$ (set to 1 by default).
 % SB (1/28/18): When do we sub-sample? I would imagine we sub-sample before we apply the error correction algorithm, otherwise it will take too long. 
 %\SCcomment{use small font for algo}.
 
+% SB (11/4/18): I have a (slight) preference for having for each method: Input argument(s) and Output(s) rather than Require and Ensure. 
 
 \begin{minipage}[t]{.45\textwidth}
 %\begin{table}
@@ -65,7 +81,7 @@ We apply an existing EC algorithm (\eg Lighter or Blue) with different initial v
 \item Pick $k_0$,$k_1$,...,$k_m$: initial values of $k$ in the range of (1, L).
 \item for i in the range (0, m) 
 \item \quad Call \textbf{Find Optimal $K_i$}($S'$, L, LM, IterMax, $k_i$)
-\item Take $k$ as the argmin of $K_i$ values picked at step 5 and do a complete correction on the whole dataset.
+\item Take $k$ as the argmin of $K_i$ values picked at step 5 and do a complete correction on the entire dataset $D_0$.
 \end{enumerate}
 \end{algorithmic}
 \end{algorithm}
@@ -79,28 +95,32 @@ We apply an existing EC algorithm (\eg Lighter or Blue) with different initial v
 %Range start: S, Range end: E
 \ENSURE $Best k: k*$
 %\scalebox{0.85}{
+\begin{flushleft}
 \begin{enumerate}
 \itemsep0em
 \item %For k in $\frac{L}{4}, \frac{L}{2}, \frac{3L}{4}$ Do: 
-Evaluate perplexity of $k_i$ and its neighbors.
-\item If perplexity of $k_i$ is less than perplexities of both its neighbors, return $k_i$ as $k*$
-\item Else, set $k_{i+1}$ = value of neighbor with least perplexity.
+Evaluate perplexity of $k_i$ and its neighbors $(k_i-\delta, k_i+\delta)$.
+\item If $f_n(LM,S',k_i) < f_n(LM,S',k_i-\delta) \&\& f_n(LM,S',k_i) < f_n(LM,S',k_i+\delta)$, return $k_i$ as $k*$
+\item Else, set $k_{i+1}$ = value of neighbor with lower $f_n$ value.
   % SB (1/28/18): The above is not correct - should be a function of S and E. 
 %\item \quad Correct $D_o$ with K-mer = k, save in $D_k$
   % SB (1/28/18): Correct the whole dataset or a sub sample of it?
 %\item \quad Select a random sample from $D_k$ and calculate the perplexity of that sample
 %\item select the 2 values of k with minimum perplexity, save as A \& B
+% SB (11/4/18): We are abusing notation below - reusing variable i. Also the call to Find Optimal K does not match the signature that we have above. 
 \item if $i \leq$ IterMax Do:
 \item \quad Increment $i$ and Call \textbf{Find Optimal K} ($D_{0}$, L, LM, A, B, $\alpha$, $k_{i+1}$)
 \item else  \quad return best $k_i$ so far
 \end{enumerate}%}
+\end{flushleft}
 \end{algorithmic}
 \end{algorithm}
 
 \end{minipage}
 
-% \subsection{Time and Space Complexity}
-% Because we apply hill climbing search to find the best value of $k$, the worst-case time complexity of the proposed algorithm is linear in terms of the read length. For the space complexity, \name only needs to save the perplexity values of previously investigated values of $k$, which is also linear in terms of the read length.
+\subsection{Time and Space Complexity}
+Because we apply hill climbing search to find the best value of $k$, the worst-case time complexity of the proposed algorithm is $L$, the upper bound of the range of $k$ values to search for. For the space complexity, \name only needs to save the perplexity values of previously investigated values of $k$, which is also linear in terms of $L$.
+% SB (11/4/18): I changed above from: linear in terms of read length to linear in terms of L. I believe no one uses k as large as read length. 
 
 %As we depend on a simple hill climbing search technique, assuming that the function 
 % SB (1/28/18): Give the running time and the memory complexity of our overall algorithm.
