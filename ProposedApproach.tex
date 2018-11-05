@@ -4,7 +4,8 @@
 \subsection{Intuition for the Use of the Perplexity metric}
 Our design uses the Perplexity metric to provide an accurate, and importantly quick, estimation of the quality of error correction with the current configuration parameter value. %\name is useful for both \textit{de novo} assembly where a reference genome is not available and also for comparative sequencing where a reference genome is available but it is expensive to perform the alignment and then calculate the assembly quality to determine the optimal value of configuration parameter.
 The Perplexity metric is based on using a language model trained on the entire original read set before error correction.
-% SB (11/4/18): We are not consistent in the casing ``Perplexity metric'' ``Perplexity metric'' and ``Perplexity metric''. Be consistent. I do not have a strong opinion, but mildly prefer the second one. 
+% SB (11/4/18): We are not consistent in the casing ``Perplexity metric'' ``Perplexity metric'' and ``Perplexity metric''. Be consistent. I do not have a strong opinion, but mildly prefer the second one.
+% Mus(11/4/18): Done.
 %\SCcomment{explain the intuition for using the Perplexity metric on the original uncorrected data, it is a sub-sample of the uncorrected data, right? if so, say how you sub-sample}
 %\AMcomment{Language model is trained on original uncorrected data but Perplexity is calculated on a sub-sample of corrected reads, we use a sample of 50K/10M reads on RNN.}
 The Perplexity metric measures how well a learned Language Model (LM) can predict the next element in an input stream. Suppose the input stream is $H$ and the next element is $e$. Then, the Perplexity metric is inversely proportional to the probability of seeing ``e'' in the stream, given the history $H$ for the learned model.
@@ -19,6 +20,7 @@ We use two different LMs in \name, which gives two different variants. We descri
 
 \noindent \textbf{N-Gram Language Models}: % Using the SRILM toolkit~\cite{Stolcke02srilm--},
 % SB (11/4/18): Implementation specific details should come later. 
+% Mus(11/4/18): OK
 We train an N-Gram model, which is word-based, from the input set of reads before correction. This N-Gram model needs word-segmentation of the input read as a preprocessing phase. Then, we use this trained LM to evaluate the quality of reads after error correction.
 % SRILM is an open source toolkit that supports building statistical N-Gram LMs, in addition to evaluating the likelihood of new sequences using the Perplexity metric. 
 %\SCcomment{likelihood of new sequences, you mean?}
@@ -27,7 +29,8 @@ We train an N-Gram model, which is word-based, from the input set of reads befor
 \noindent \textbf{RNN Language Models}: The second technique is RNN-based, using different RNN architectures, \eg standard RNNs, LSTMs, and GRUs.
 These models can be trained either as word-based models or character-based models. We train them as character-based models to avoid having to make the decision about how to segment the genomic string, as we have to do for the N-Gram model.
 % We build over the TensorFlow platform for our implementation \cite{45381}.
-% SB (11/4/18): Moved to result section. 
+% SB (11/4/18): Moved to result section.
+% Mus(11/4/18): Thanks.
 %\SCcomment{is it just using TensorFlow's N-gram model or do we implement something on top that we can release. This community likes new open-source implementations.}
 %\AMcomment{We can open-source \name itself after acceptance}
 
@@ -67,6 +70,7 @@ This is intended to show the EC gain of just one iteration, achieving performanc
 %\SCcomment{use small font for algo}.
 
 % SB (11/4/18): I have a (slight) preference for having for each method: Input argument(s) and Output(s) rather than Require and Ensure. 
+% Mus(11/4/18): Both are fine. Ashraf changed it to Input and Output.
 
 \begin{minipage}[t]{.45\textwidth}
 %\begin{table}
