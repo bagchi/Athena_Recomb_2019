@@ -2,26 +2,26 @@
 %\SCcomment{So how has previous work chosen best parameters for error correction prior to de novo assembly?} 
 %\AMcomment{Addressed in intro. in the paragraph starting with "Many  existing  solutions"}
 \subsection{Intuition for the Use of the Perplexity metric}
-Our design uses the Perplexity metric to provide an accurate, and importantly quick, estimation of the quality of error correction with the current configuration parameter value. %\name is useful for both \textit{de novo} assembly where a reference genome is not available and also for comparative sequencing where a reference genome is available but it is expensive to perform the alignment and then calculate the assembly quality to determine the optimal value of configuration parameter.
-The Perplexity metric is based on using a language model trained on the entire original read set before error correction.
+Our design uses the Perplexity metric to provide an accurate, and importantly quick, estimation of the EC quality with the current configuration parameter value(s). %\name is useful for both \textit{de novo} assembly where a reference genome is not available and also for comparative sequencing where a reference genome is available but it is expensive to perform the alignment and then calculate the assembly quality to determine the optimal value of configuration parameter.
+The Perplexity metric is based on using LM trained on the entire original data prior to error correction.
 % SB (11/4/18): We are not consistent in the casing ``Perplexity metric'' ``Perplexity metric'' and ``Perplexity metric''. Be consistent. I do not have a strong opinion, but mildly prefer the second one.
 % Mus(11/4/18): Done.
 %\SCcomment{explain the intuition for using the Perplexity metric on the original uncorrected data, it is a sub-sample of the uncorrected data, right? if so, say how you sub-sample}
 %\AMcomment{Language model is trained on original uncorrected data but Perplexity is calculated on a sub-sample of corrected reads, we use a sample of 50K/10M reads on RNN.}
-The Perplexity metric measures how well a learned Language Model (LM) can predict the next element in an input stream. Suppose the input stream is $H$ and the next element is $e$. Then, the Perplexity metric is inversely proportional to the probability of seeing ``e'' in the stream, given the history $H$ for the learned model.
+The Perplexity metric is then calculated on a subset of the corrected reads to measure the  EC performance. It measures how well language modeling can predict the next element in an input stream. Suppose the input stream is $H$ and the next element is $e$. Then, the Perplexity metric is inversely proportional to the probability of seeing ``e'' in the stream, given the history $H$ for the learned model.
 This method works because there is a high negative correlation of the Perplexity metric with both EC metrics---Alignment Rate and EC Gain.
-Given this anti-correlation, we can rely on the Perplexity metric as an evaluation function, and apply a simple search technique (\textit{e.g.}, hill climbing) to find the best $k$-value for a given dataset. In this description, for simplicity of exposition, we use the $k$-value in $k$-mer based techniques as an example of \name-tuned configuration parameter. However, \name can tune any other relevant configuration parameter in error correction algorithms and we experimentally show the behavior with another parameter in the RACER tool. 
-Figure \ref{fig:PPL_Simple_Example} shows an example how Perplexity can evaluate the likelihood of a sequence of $k$-mers using their frequencies and contextual dependencies. In this example, we notice that the corrected read set (\ie on the right) has a considerably lower Perplexity value (15.2), relative to the erroneous set (77.72). This is an example of our intuition that the Perplexity metric reflects the correctness of the read dataset is validated through a negative relationship.
+Given this anti-correlation, we can rely on the Perplexity metric as an evaluation function, and apply a simple search technique (\textit{e.g.}, hill climbing) to find the best $k$-value for a given dataset. In this description, for simplicity of exposition, we use the $k$-value in $k$-mer based techniques as an example of \name-tuned configuration parameter. However, \name can tune any other relevant configuration parameter in error correction algorithms and we experimentally show the behavior with another parameter---Genome Length---in RACER. 
+Figure \ref{fig:PPL_Simple_Example} shows an example how Perplexity can evaluate the likelihood of a sequence of $k$-mers using their frequencies and contextual dependencies. In this example, we notice that the corrected read set (\ie on the right) has a considerably lower Perplexity value (15.2), relative to the erroneous set (77.72). Thus, our intuition that the Perplexity metric reflects the correctness of the read dataset is validated through the observed negative relationship.
 
 % SB (11/4/18): Worked till here.
 
 \subsection{Application of Language Models}
-We use two different LMs in \name, which gives two different variants. We describe each model next.
+We use two different LMs in \name, which gives two different variants. We describe them next.
 
 \noindent \textbf{N-Gram Language Models}: % Using the SRILM toolkit~\cite{Stolcke02srilm--},
 % SB (11/4/18): Implementation specific details should come later. 
 % Mus(11/4/18): OK
-We train an N-Gram model, which is word-based, from the input set of reads before correction. This N-Gram model needs word-segmentation of the input read as a preprocessing phase. Then, we use this trained LM to evaluate the quality of reads after error correction.
+We train an N-Gram model \cite{brown1992class}, which is word-based, from the input set of reads before correction. This N-Gram model needs word-based segmentation of the input read as a pre-processing phase. Then, we use this trained LM to evaluate EC performance.
 % SRILM is an open source toolkit that supports building statistical N-Gram LMs, in addition to evaluating the likelihood of new sequences using the Perplexity metric. 
 %\SCcomment{likelihood of new sequences, you mean?}
 % Mus: Done.

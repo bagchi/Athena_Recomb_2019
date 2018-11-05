@@ -4,13 +4,15 @@
 
 In this section, we evaluate \name variants separately by correcting errors in 5 real datasets and evaluating the quality of the resultant assembly. We implement the N-Gram model using the SRILM toolkit~\cite{Stolcke02srilm--}. SRILM is an open source toolkit that supports building statistical N-Gram LMs, in addition to evaluating the likelihood of new sequences using the perplexity metric. For the RNN LM implementation, we build on the TensorFlow platform \cite{45381}.
 % SB (11/4/18): Say one sentence more on the RNN implementation/setup that we do. 
-After correction, we run the Bowtie2 aligner \cite{langmead2012fast} and measure the Alignment Rate and the Error Correction Gain. A higher value for either metric implies superior error correction.
+After correction, we run the Bowtie2 aligner \cite{langmead2012fast} and measure the Alignment Rate and the Error Correction Gain. A higher value for either metric (i.e., Alignment Rate or Correction Gain) implies superior error correction.
 % SB (11/4/18): Space permitting give a one sentence description of what each metric means. 
+% Mus(11/5/18): Done.
 We do a sweep through a range of $k$-values and measure the alignment rate to determine if the \name-generated $k$-value is optimal or its distance from optimality. For interpreting the execution time results, our experiments were performed on Dell Precision T3500 Workstation, with 8 CPU cores, each running at 3.2GHZ, 12GB RAM, and Ubuntu 16.04 Operating System.
 We use 3 EC tools, in pipeline mode with \name, namely, Lighter, Blue, and RACER. Blue uses a k-mer consensus to target different kinds of errors such as substitution, deletion and insertion errors, as well as uncalled bases. This improves the performance of both alignment and assembly \cite{greenfield2014blue}. On the other hand, Lighter is much faster as it uses only a sample of k-mers to perform correction. %\SCcomment{what kinds?}
 %Blue is memory efficient and runs faster on large data sets than comparable tools.
-Third, RACER uses the genome length to automatically calculate multiple $k$-values to use for correction.
+Third, RACER uses a different configuration parameter than the value of $k$ and we are able to tune that as well. Specifically, RACER uses the genome length to automatically calculate multiple $k$-values to use for correction.
 % SB (11/4/18): Try to play up our strength here - RACER uses a different configuration parameter than the value of k and we are able to tune that as well. Above sentence detracts from our generality story. 
+% Mus(11/5/18): Added suggested sentence. Please check.
 %\SCcomment{where you say they target different kinds of errors, which one targets what type. Also, how can you tune GL, isn't GL fixed for a genome?}
 Our ability to tune any of these EC algorithm's parameters is in line with our vision and ongoing work to design extensible blocks of software to expedite algorithmic development in bioinformatics~\cite{mahadik2016sarvavid}.
 Incidentally, we started using another popular EC tool, Reptile, but it only allowed for a smaller range of $k$-values, beyond which it ran into out-of-memory errors. Hence, to demonstrate results with the full range of $k$ values, we restricted our pipelining to Lighter and Blue. 
@@ -48,7 +50,7 @@ The five datasets have different read lengths (from 36bp in D1\&D3 to 100pb in D
 \end{center}
 \end{table}
 
-\vspace{-8pt}
+\vspace{-12pt}
 \subsection{Optimal Parameter Selection}
 \vspace{-8pt}
 The results of using \name with Lighter, Blue, and RACER tools are shown in Table \ref{tb1:Lighter-Blue-Racer-Perplexity-vs-Alignment} for each dataset. In the third column, the value of $k$ (or, GL for RACER) in bold is the one that gives the best assembly quality, evaluated using ground truth.
@@ -284,10 +286,10 @@ More importantly though, the strong quantitative relationship between perplexity
 \centering
 \caption {Comparison of Overall Alignment Rate between Fiona's and RACER's (with and without \name's tuning). Columns 5 \& 6 demonstrate the strong anti-correlation values between Perplexity and Alignment Rate. The last two columns show the assembly quality (in terms of NG50) before and after correction by Racer tuned with \name. Improvements in NG50 are shown between  parentheses}
 % SB (11/4/18): Move the correlation columns first. Put double lines to group columns (e.g., the two correlation columns). 
-\scalebox{0.85}{
+\scalebox{0.8}{
 \begin{tabular}{ |c|c|c|c|c|c|c|c| }
 \hline
-\makecell{Dataset} & \makecell{Fiona \\ + Bowtie2 \\ (Alignment Rate)} & \makecell{RACER \\ w/o \name \\ + Bowtie2 \\ (Alignment Rate)} & \makecell{RACER \\ with \name \\ + Bowtie2 \\ (Alignment Rate)}& \makecell{Correlation \\ (N-Gram)} & \makecell{Correlation \\ (RNN)} & \makecell{NG50 \\ of Velvet \\ without EC} & \makecell{NG50 \\ of Velvet \\ with (Racer+\name)} \\ 
+\makecell{Dataset} & \makecell{Fiona \\ + Bowtie2 \\ (Alignment Rate)} & \makecell{RACER \\ w/o \name \\ + Bowtie2 \\ (Alignment Rate)} & \makecell{RACER \\ w/ \name \\ + Bowtie2 \\ (Alignment Rate)}& \makecell{Correlation \\ (N-Gram)} & \makecell{Correlation \\ (RNN)} & \makecell{NG50 \\ of Velvet \\ w/o EC} & \makecell{NG50 \\ of Velvet \\ w/ (Racer+\name)} \\ 
 \hline
 D1 &  99.25\% & 85.01\% & \textbf{99.26}\% &  -0.977 & -0.938 & 3019 & 6827 (2.26X)\\
 D2 &  73.75\% & 58.66\% & \textbf{81.15}\%&  -0.981 & -0.969 & 47 & 2164 (46X) \\
@@ -331,7 +333,7 @@ with manually tuned configuration parameters.
 % runtime of performing alignment (using Bowtie2 tool [14]).
 % This seems to me to be comparing apples and oranges. 
 
-\begin{table}[H]
+\begin{table}[h]
 \centering
 \caption {Search time comparison for estimating the perplexity metric with \name (N-gram) for a point in search space \textit{vs}. estimating overall alignment rate with Bowtie2 }%6.2X, 4.8X, 4.7X, 3.6X, and 5.82X, improvements, respectively.}
 \scalebox{0.83}{
