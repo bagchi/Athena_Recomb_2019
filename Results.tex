@@ -4,11 +4,16 @@
 
 In this section, we evaluate \name variants separately by correcting errors in 5 real datasets and evaluating the quality of the resultant assembly. We implement the N-Gram model using the SRILM toolkit~\cite{Stolcke02srilm--}. SRILM is an open source toolkit that supports building statistical N-Gram LMs, in addition to evaluating the likelihood of new sequences using the perplexity metric. For the RNN LM implementation, we build on the TensorFlow platform \cite{45381}.
 % SB (11/4/18): Say one sentence more on the RNN implementation/setup that we do. 
-After correction, we run the Bowtie2 aligner \cite{langmead2012fast} and measure the alignment rate. A higher value implies superior error correction. We do a sweep through a range of $k$-values and measure the alignment rate to determine if the \name-generated $k$-value is optimal or determine how far from optimal, when not optimal. For interpreting the runtime results, our experiments were performed on Dell Precision T3500 Workstation, with 8 CPU cores, each running at 3.2GHZ, 12GB RAM, and Ubuntu 16.04 Operating System.
+After correction, we run the Bowtie2 aligner \cite{langmead2012fast} and measure the Alignment Rate and the Error Correction Gain. A higher value for either metric implies superior error correction.
+% SB (11/4/18): Space permitting give a one sentence description of what each metric means. 
+We do a sweep through a range of $k$-values and measure the alignment rate to determine if the \name-generated $k$-value is optimal or its distance from optimality. For interpreting the execution time results, our experiments were performed on Dell Precision T3500 Workstation, with 8 CPU cores, each running at 3.2GHZ, 12GB RAM, and Ubuntu 16.04 Operating System.
 We use 3 EC tools, in pipeline mode with \name, namely, Lighter, Blue, and RACER. Blue uses a k-mer consensus to target different kinds of errors such as substitution, deletion and insertion errors, as well as uncalled bases. This improves the performance of both alignment and assembly \cite{greenfield2014blue}. On the other hand, Lighter is much faster as it uses only a sample of k-mers to perform correction. %\SCcomment{what kinds?}
 %Blue is memory efficient and runs faster on large data sets than comparable tools.
 Third, RACER uses the genome length to automatically calculate multiple $k$-values to use for correction.
+% SB (11/4/18): Try to play up our strength here - RACER uses a different configuration parameter than the value of k and we are able to tune that as well. Above sentence detracts from our generality story. 
 %\SCcomment{where you say they target different kinds of errors, which one targets what type. Also, how can you tune GL, isn't GL fixed for a genome?}
+Our ability to tune any of these EC algorithm's parameters is in line with our vision and ongoing work to design extensible blocks of software to expedite algorithmic development in bioinformatics~\cite{mahadik2016sarvavid}.
+Incidentally, we started using another popular EC tool, Reptile, but it only allowed for a smaller range of $k$-values, beyond which it ran into out-of-memory errors. Hence, to demonstrate results with the full range of $k$ values, we restricted our pipelining to Lighter and Blue. 
 
 Our datasets are Illumina short reads [Table \ref{tbl:Datasets_Description}], used in multiple prior studies (\eg~\cite{yang2010reptile, doi:10.1093/bioinformatics/btp379}). For these, there exist ground-truth reference genomes, which we use to evaluate the EC quality. %The first two datasets are Illumina reads from \textit{E. coli}. 
 The five datasets have different read lengths (from 36bp in D1\&D3 to 100pb in D5) and different error rates (from $<$ 3\% in D1 to 43\% in D2).  
@@ -42,18 +47,67 @@ The five datasets have different read lengths (from 36bp in D1\&D3 to 100pb in D
 %\end{adjustbox}
 \end{center}
 \end{table}
+
+\vspace{-8pt}
+\subsection{Optimal Parameter Selection}
+\vspace{-8pt}
+The results of using \name with Lighter, Blue, and RACER tools are shown in Table \ref{tb1:Lighter-Blue-Racer-Perplexity-vs-Alignment} for each dataset. In the third column, the value of $k$ (or, GL for RACER) in bold is the one that gives the best assembly quality, evaluated using ground truth.
+% SB (11/4/18): The above sentence will change based on restructuring of the table according to my comment in the table. 
+We see that this almost always corresponds to the lowest perplexity scores computed using \name's language modeling. %(values in bold in the 4th and 5th columns for RNN and N-gram models). 
+% SB (11/4/18): But the reader cannot see because the table does not show it. If true, then say (not shown in the table). 
+In the cases where the lowest perplexity does not correspond to the best assembly quality (this happens in 3 of the 10 cases aggregated between Lighter and Blue), the difference in overall alignment rate is small, less than 0.27\% in the worst case.  
+%\SCcomment{assembly quality of overall alignment rate?}
+Further, the anti-correlation between perplexity and alignment rate holds for both optimal and non-optimal $k$-values. 
+%\SCcomment{it said assembly quality, I changed to alignment rate. I don't think you measured assembly quality downstream?}
+This shows that our hypothesis is valid across a range of $k$-values. We notice that the feasible range of $k$-values in Blue is (20, 32), distinct from Lighter's. Another interesting observation is that the optimal $k$-values are different across the two different EC tools, Lighter and Blue, for the same dataset, as observed before~\cite{song2014lighter}). 
+\name can be applied to a different configuration parameter, GL for the RACER tool, in line with our design as a general-purpose tuning tool.
+
+% For Lighter correction tool, results in this section show the very high correlation between the best value of $k$ used for correction and the corresponding language model perplexity of the data. This strong correlation in Char-based RNN LM perplexity and the best value of $k$ is shown for all data sets as shown in \ref{tb1: Lighter:Perplexity Vs Alignment}. 
+% SB (1/28/18): Where is the result here? This is a super important result that is missing. We need to show that the value of K chosen by our algorithm leads to the best alignment.
+% Mus: done, I have mentioned Table 2 lighter results.
+% \subsection{RNN versus LSTM Sequential Models}
+% We trained an RNN language model and Long Short Term Memory (LSTM) model with the same number of hidden layers and number of neurons per layer to compare the performance between them. This was done since LSTM is considered the state-of-the-art model in NLP applications. First, we find that the time for training an LSTM is so much longer than an RNN that it is likely infeasible to be used for our problem statement. 
+% % SB (1/28/18): How much longer?
+% % Mus: I gave example for one epoch time in both RNN- LSTM
+% An LSTM epoch is 3 times longer than an RNN epoch (about 12 hours compared to 4 hours) and convergence for one experimental setup takes 5 epochs.
+% Second, we find that the accuracy improvement with LSTM is not significant over RNN. For example, on the validation data set, it gives only a 9\% perplexity improvement over RNN. This is shown in Table \ref{tb:LSTM Vs RNN}. 
+% As a result, we continue using RNN as our language model. 
+% % SB (1/28/18): We have not introduced earlier the notion of ``sentences'' in our context. 
+% % Mus: done
+
+% \begin{table}
+% \begin{center}
+%  \begin{tabular}{|c | c | c|} 
+%  \hline
+%  Data set & LSTM perplexity  & RNN perplexity  \\ [0.5ex] 
+%  \hline
+%  D3 & 3.996 & 4.286  \\ 
+%  \hline
+% \end{tabular}
+% \end{center}
+% \caption {A comparison of average perplexity on validation data set (\ie, 5\% of D3) using two different trained language models. The small improvement in accuracy of LSTM over RNN does not justify its much longer training and prediction times.}
+% \label{tb:LSTM Vs RNN}
+% \end{table}
+
 \vspace{-15pt}
 \subsection{N-Gram Language Model Results}
 \vspace{-5pt}
-We start by training an N-Gram language model from the original dataset. We divide each read into smaller segments (words) of length $L_s$ (set to 7 by default). A careful reader may be concerned that selecting the best value of $L_s$ is a difficult problem in itself, of the same order of difficulty as our original problem, which is {\em not} the case. From domain knowledge, 
+We start by training an N-Gram language model from the original dataset. We divide each read into smaller segments (words) of length $L_s$ (set to 7 by default). A careful reader may be concerned that selecting the best value of $L_s$ is a difficult problem in itself, of the same order of difficulty as our original problem. Fortunately, this is {\em not} the case and $L_s$ selection turns out to be a much simpler task. From domain knowledge, 
 %\SCcomment{just for my information, where did you get the domain knowledge bit?}
-we know that if we use $L_s = 4$ or less, the frequencies of the different words will be similar, thus reducing the model's discriminatory power, while a large value will mean that the model's memory footprint increases. We find that for a standard desktop-class machine with 32GB of memory, $L_s = 8$ is the maximum that can be accommodated. Further, we find that the model performance is {\em not} very sensitive in the range (5--7), so we end up using $L_s = 7$. The same argument holds for selecting a history of words, and we use a tri-gram model (history of 3 words) for all our experiments.
+we know that if we use $L_s = 4$ or less, the frequencies of the different words will be similar,
+% SB (11/4/18): Can you provide the intuition behind the above claim? 
+thus reducing the model's discriminatory power, while a large value will mean that the model's memory footprint increases. We find that for a standard desktop-class machine with 32GB of memory, $L_s = 8$ is the maximum that can be accommodated. Further, we find that the model performance is {\em not} very sensitive in the range (5--7), so we end up using $L_s = 7$.
+% SB (11/4/18): Why not Ls=5 since that will need less memory?
+The same argument holds for selecting a history of words, and we use a tri-gram model (history of 3 words) for all our experiments.
 Second, we compare the perplexity metric for datasets corrected with different $k$-values and compare the perplexity metric (without a reference genome) to the alignment rate (using a reference genome). 
 We always report the \textit{average perplexity}, which is just the total perplexity averaged across all words.
 Our results show a high negative correlation ($\leq$ -0.946) between the two  metrics on the 5 datasets, as shown in Table \ref{tbl:Fiona_5_datasets_Correlation_N_Gram}. %The negative value of the correlation is because of the expected inverse relationship between the perplexity metric and the alignment rate. 
-To reiterate, the benefit of using the perplexity metric is that it can be computed without the ground truth. Plus, it is more efficient than computing the alignment rate using a reference genome, when applicable. 
+To reiterate, the benefit of using the perplexity metric is that it can be computed without the ground truth and even where a reference genome is available, it is more efficient than aligning to the reference and then computing the alignment rate. 
 
 % SB (1/29/18): To repeat above point in introduction.
+
+% SB (11/4/18): Put exhaustive search first. Then for Athena (N-gram) if it is the same as exhaustive search, just say "SAME as Exhaustive". Same for Athena (RNN). This way the reader does not have to pore through 3 sets of numbers and figure out that they are the same. So for Athena columns only give the numbers if they are different.
+% SB (11/4/18): Rows 1 and 2 should be flipped. That means "With Athena (N-gram)" Etc should go above "Lighter". 
 \begin{table}
 \centering
  \caption {Comparison of Lighter, Blue, and RACER using 5 datasets. This is for finding the best $k$-value (GL for RACER) using \name variants \textit{vs.} exhaustive search. We find either the optimal value or within 0.27\% (over Alignment Rate) and within 8.5\% (EC Gain) of the theoretical best (in the worst case), consistent with the reported results by Lighter (Figure 5 in \cite{song2014lighter}). We also notice that for RACER, GL found by \name is within 3\% of the reference GL (except for the RNN model with D5, which still achieves very close performance for both Alignment Rate and EC Gain.)} 
@@ -99,7 +153,7 @@ To reiterate, the benefit of using the perplexity metric is that it can be compu
   \hline
   \multicolumn{10}{|c|}{\textbf{RACER}}\\
   \hline
-                         \textbf{D1} & \textbf{GL=4.7} & \textbf{99.26\%} & \textbf{84.8\%} & \textbf{GL=4.7} & \textbf{99.26\%} & \textbf{84.8\%} & \textbf{GL=4.7} & \textbf{99.26\%} & \textbf{84.8\%}\\ 
+                         \textbf{D1} & \textbf{GL=4.7M} & \textbf{99.26\%} & \textbf{84.8\%} & \textbf{GL=4.7M} & \textbf{99.26\%} & \textbf{84.8\%} & \textbf{GL=4.7M} & \textbf{99.26\%} & \textbf{84.8\%}\\ 
  \hline
                           %&  & k = 8 &  204.849 &  121.88 & 56.9\% \\ 
      					  \textbf{D2} & \textbf{GL=4.7M} & \textbf{81.15\%} & \textbf{92.9\%} & \textbf{GL=4.7M} & \textbf{81.15\%} & \textbf{92.9\%} & \textbf{GL=4.7M} & \textbf{81.15\%} & \textbf{92.9\%}
@@ -149,66 +203,15 @@ To reiterate, the benefit of using the perplexity metric is that it can be compu
 %   \label{fig:Alignment Rate Vs Perplexity}
 % \end{figure}
 % }
-\vspace{-5pt}
-\subsection{Search time improvement with \name}
-\vspace{-5pt}
-% SB (1/28/18): I don't understand this. Need to rewrite after sitting down and understanding. 
-% This includes time to run for different k values? But this says "average runtime for evaluating
-% the quality of correction using N-Gram language model versus the average
-% runtime of performing alignment (using Bowtie2 tool [14]).
-% This seems to me to be comparing apples and oranges. 
 
-\begin{table}[H]
-\centering
-\caption {Search time comparison for estimating the perplexity metric with \name (N-gram) for a point in search space \textit{vs}. estimating overall alignment rate with Bowtie2 }%6.2X, 4.8X, 4.7X, 3.6X, and 5.82X, improvements, respectively.}
-\scalebox{0.83}{
-\begin{tabular}{ |c|c|c|c|c|c|c|c|c|c| }
-\hline
-\multicolumn{10}{|c|}{\textbf{Dataset}}\\
-\hline
- \multicolumn{2}{|c|}{\textbf{D1}} & \multicolumn{2}{|c|}{\textbf{D2}} & \multicolumn{2}{|c|}{\textbf{D3}} & \multicolumn{2}{|c|}{\textbf{D4}} & \multicolumn{2}{|c|}{\textbf{D5}}\\
-  \hline
-Athena & Bowtie2 & Athena & Bowtie2 & Athena & Bowtie2 & Athena & Bowtie2 & Athena & Bowtie2 \\ 
- \hline
-1m 38s & 10m 5s  &  49s & 3m 53s &  1m 39s & 7m 50s &  52s & 3m 8s &  1m 40s & 9m 42s\\ 
- \hline
-\end{tabular}}
-%\end{center}
-\label{tbl:N_Gram_Run_Time_Vs_Bowtie}
-\end{table}
-
-Consider that in our problem statement, we are trying to search through a space of configuration parameters in order to optimize a metric (EC Gain\% or Alignment Rate). The search space can be large and since the cost of searching shows up as a runtime delay, it is important to reduce the time that it takes to evaluate that metric of each search point. In today's state-of-the-art, to find the best value of a configuration parameter~\cite{chikhi2013informed, mahadik2017scalable}, \eg $k$-value, the method would be to pick a $k$ (a single point in the space), run the EC tool with that value, then perform alignment, and finally compute the performance for that value. In contrast, with \name, to explore one point in the search space, we run the EC algorithm with the $k$-value, and then compute the perplexity metric. Here, we evaluate the relative time spent in exploring one point in the search space using \name vis-$\grave{a}$-vis the baseline. The result is shown in Table \ref{tbl:N_Gram_Run_Time_Vs_Bowtie}. For this comparison, the alignment is done by Bowtie2~\cite{langmead2012fast}. We find that using the baseline approach, each step in the search takes respectively 6.2X, 4.8X, and 4.7X, 3.6X, and 5.82X for the 5 datasets respectively. Further, while we use the hill-climbing technique to search through the space, today's baseline methods apply brute force ~\cite{song2014lighter} and thus the end-to-end runtime advantage of \name will be magnified. 
-% In this experiment, we demonstrate the advantage of using the perplexity metric in tuning the value of $k$ even in cases where a reference genome exists. We show that using the trained language models can reduce the training time greatly compared to applying the alignment phase for each investigated value of $k$. Table \ref{tbl:N_Gram_Run_Time_Vs_Bowtie} shows the average runtime for evaluating the quality of correction using N-Gram language model versus the average runtime of performing alignment (using Bowtie2  tool \cite{langmead2012fast}). The results show a reduction of 0.16x, 0.21x, and 0.19x for the three data sets described in Table \ref{tbl:N_Gram_Run_Time_Vs_Bowtie}.
-% SB (1/28/18): Reduction of 16\%, 21\%, and 19\%?
-
-% SB (1/28/18): All the material in this paragraph should be moved and merged with what we have at point [A] (see above in this section).
-% Mus: done
-
-% Therefore, the validation perplexity is computed on unseen data during training. Each epoch has a checkpoint that evaluates the perplexity of the language model over validation data set. We found that about ``5'' epochs are enough to have saturation of perplexity using our validation data set. Finally, we choose the checkpoint, named the best model , with the least perplexity, which gave us the best trained language model.
-\begin{table}[H]
-\centering
-\caption {Comparison of Overall Alignment Rate between Fiona's and RACER's (with and without \name's tuning). Columns 5 \& 6 demonstrate the strong anti-correlation values between Perplexity and Alignment Rate. The last two columns show the assembly quality (in terms of NG50) before and after correction by Racer tuned with \name. Improvements in NG50 are shown between  parentheses}
-\scalebox{0.85}{
-\begin{tabular}{ |c|c|c|c|c|c|c|c| }
-\hline
-\makecell{Dataset} & \makecell{Fiona} & \makecell{RACER \\ w/o \name \\ + Bowtie2} & \makecell{RACER \\ with \name \\ + Bowtie2}& \makecell{Correlation \\ (N-Gram)} & \makecell{Correlation \\ (RNN)} & \makecell{NG50 \\ before \\ correction} & \makecell{NG50 \\ after \\ correction with \\ (Racer+\name)} \\ 
-\hline
-D1 &  99.25\% & 85.01\% & \textbf{99.26}\% &  -0.977 & -0.938 & 3019 & 6827 (2.26X)\\
-D2 &  73.75\% & 58.66\% & \textbf{81.15}\%&  -0.981 & -0.969 & 47 & 2164 (46X) \\
-D3 &  83.12\% & 80.79\% & \textbf{84.11}\% &  -0.982 & -0.968 & 1042 & 4164 (4X) \\
-D4 &  95.33\% & 93.86\% &	95.33\% &  -0.946 & -0.930 & 118 & 858 (7.27X) \\
-D5 &  \textbf{92.34}\% & 90.91\% &	92.29\% &  -0.970 & -0.962 & 186 & 2799 (15X) \\
-\hline
-\end{tabular}}
-\label{tbl:Fiona_5_datasets_Correlation_N_Gram}
-\end{table}
-\vspace{-12pt}
+\vspace{-8pt}
 \subsection{Char-RNN Language Model Results}
 % SB (1/28/18): Point [A] - for reference later on for moving some material here. % Mus: done
 For training our RNN, we used the ``tensorflow-char-rnn'' library~\cite{45381}. After parameter tuning, we use the following for our experiments: 2 hidden layers with 300 neurons per layer, mini-batch size, and learning rate of 200 and $2 e^{-3}$ respectively.
+% SB (11/4/18): Size of input layer, output layer? 
 For each of the 5 datasets, we used 90\% for training, 5\% for validation, and 5\% for testing, with no overlap.
 % SB (1/29/18): Did we use k-fold cross validation?
-We used 2 EC tools, Lighter and Blue, in default mode, with \name automatically tuning $k$, demonstrating \name's extensibility. This is in line with our vision to design extensible blocks of software to expedite algorithmic development~\cite{mahadik2016sarvavid}. Incidentally, we started using another popular EC tool, Reptile, but it only allowed for a smaller range of $k$-values, beyond which it ran into out-of-memory errors. %Hence, to demonstrate results with the full range of $k$ values, we restricted our pipelining to Lighter and Blue. 
+%% We used 2 EC tools, Lighter and Blue, in default mode, with \name automatically tuning $k$, demonstrating \name's extensibility. This is in line with our vision to design extensible blocks of software to expedite algorithmic development~\cite{mahadik2016sarvavid}. 
 % SB (1/28/18): We should say what error correction algorithm we are using as default. We need to justify why we use Blue and Lighter but not Reptile. 
 % SB (1/28/18): Begin repeat. 
 %The main insight from our experiments is that the better version of data set after correction (i.e., where all reads of a data set after correction have higher alignment accuracy with the reference genome) is equivalent to lower perplexity of the language model. For most of existing correcting techniques, the existence of a reference genome is a must to evaluate the strength of such correction. Consequently, one strength of our proposal is that we train the language model on erroneous data (i.e., data set before doing correction) and find that that the language model captures dependencies between characters and mutual information. As a result, the perplexity of the language model on the corrected version of each data set is lower than the erroneous version of the data set.
@@ -216,11 +219,15 @@ We used 2 EC tools, Lighter and Blue, in default mode, with \name automatically 
 % SB (1/28/18): The repeated material from above can be chopped.
 % Mus: done
 
-For our char-RNN results, we find that the perplexity metric has a strong quantitative relation to the overall alignment rate [Table \ref{tbl:Fiona_5_datasets_Correlation_N_Gram}], with the negative correlation always greater than 0.93.
+For our char-RNN results, we find that the perplexity metric has a strong negative relation to the overall alignment rate [Table \ref{tbl:Fiona_5_datasets_Correlation_N_Gram}], with the absolute value of the correlation always greater than 0.93.
 Here we have to sample the uncorrected set for calculating the perplexity measure because using an RNN to perform the calculation is expensive. This is because it involves, for predicting each character, doing 4 feed-forward passes (corresponding to the one-hot encodings for A, T, G, or C), each through 600 neurons. Empirically, for a test sample size of 50K, this translates to approximately 30 minutes on a desktop-class machine.  
-In Lighter and Blue, we use $50K$ samples with uniform sampling, and in synthetic experiments, we use $100K$ samples (i.e., only 1\% of the dataset ).
+In the experiments with the real datasets, we use $50K$ samples with uniform sampling, and in synthetic experiments, we use $100K$ samples (i.e., only 1\% of the dataset).
 %\SCcomment{what fraction of the dataset is this?}.
-We find that the perplexity difference increases roughly linearly with the dataset size. More importantly though, the strong quantitative relationship between perplexity and the EC quality is maintained throughout. For D1, the perplexity difference before and after EC is the lowest, with D1 containing the least errors to start with. 
+% We find that the perplexity difference increases roughly linearly with the dataset size.
+We find that the perplexity score decreases roughly linearly with increasing dataset size.
+% SB (11/4/18): I reworded the above sentence. Verify.
+More importantly though, the strong quantitative relationship between perplexity and the EC quality is maintained throughout.
+% For D1, the perplexity difference before and after EC is the lowest, with D1 containing the least errors to start with. 
 
 % \begin{table}
 % \begin{center}
@@ -273,56 +280,84 @@ We find that the perplexity difference increases roughly linearly with the datas
 % \label{tab: before_after_rnn table}
 % \end{table}
 
-\vspace{-8pt}
-\subsection{Optimal Parameter Selection}
-\vspace{-8pt}
-The results of using \name with Lighter, Blue, and RACER tools are shown in Table \ref{tb1:Lighter-Blue-Racer-Perplexity-vs-Alignment} for each dataset. In the third column, the value of $k$ (or, GL for RACER) in bold is the one that gives the best assembly quality, evaluated using ground truth. We see that this almost always corresponds to the lowest perplexity scores comouting using \name's language modeling %(values in bold in the 4th and 5th columns for RNN and N-gram models). 
-In the cases where the lowest perplexity does not correspond to the best assembly quality (this happens in 3 of the 10 cases aggregated between Lighter and Blue), the difference in overall alignment rate is small, less than 0.27\% in the worst case.  
-%\SCcomment{assembly quality of overall alignment rate?}
-Further, the anti-correlation between perplexity and alignment rate holds for both optimal and non-optimal $k$-values. 
-%\SCcomment{it said assembly quality, I changed to alignment rate. I don't think you measured assembly quality downstream?}
-This shows that our hypothesis is valid across a range of $k$-values. We notice that the feasible range of $k$-values in Blue is (20, 32), distinct from Lighter's. Another interesting is that the optimal $k$-values are different across different EC tools (Lighter and Blue here) for the same dataset, as observed before~\cite{song2014lighter}). 
-In addition, we see that \name can be applied to a different configuration parameter, GL for the RACER tool.
+\begin{table}[H]
+\centering
+\caption {Comparison of Overall Alignment Rate between Fiona's and RACER's (with and without \name's tuning). Columns 5 \& 6 demonstrate the strong anti-correlation values between Perplexity and Alignment Rate. The last two columns show the assembly quality (in terms of NG50) before and after correction by Racer tuned with \name. Improvements in NG50 are shown between  parentheses}
+% SB (11/4/18): Move the correlation columns first. Put double lines to group columns (e.g., the two correlation columns). 
+\scalebox{0.85}{
+\begin{tabular}{ |c|c|c|c|c|c|c|c| }
+\hline
+\makecell{Dataset} & \makecell{Fiona \\ + Bowtie2 \\ (Alignment Rate)} & \makecell{RACER \\ w/o \name \\ + Bowtie2 \\ (Alignment Rate)} & \makecell{RACER \\ with \name \\ + Bowtie2 \\ (Alignment Rate)}& \makecell{Correlation \\ (N-Gram)} & \makecell{Correlation \\ (RNN)} & \makecell{NG50 \\ of Velvet \\ without EC} & \makecell{NG50 \\ of Velvet \\ with (Racer+\name)} \\ 
+\hline
+D1 &  99.25\% & 85.01\% & \textbf{99.26}\% &  -0.977 & -0.938 & 3019 & 6827 (2.26X)\\
+D2 &  73.75\% & 58.66\% & \textbf{81.15}\%&  -0.981 & -0.969 & 47 & 2164 (46X) \\
+D3 &  83.12\% & 80.79\% & \textbf{84.11}\% &  -0.982 & -0.968 & 1042 & 4164 (4X) \\
+D4 &  95.33\% & 93.86\% &	95.33\% &  -0.946 & -0.930 & 118 & 858 (7.27X) \\
+D5 &  \textbf{92.34}\% & 90.91\% &	92.29\% &  -0.970 & -0.962 & 186 & 2799 (15X) \\
+\hline
+\end{tabular}}
+\label{tbl:Fiona_5_datasets_Correlation_N_Gram}
+\end{table}
 
-% For Lighter correction tool, results in this section show the very high correlation between the best value of $k$ used for correction and the corresponding language model perplexity of the data. This strong correlation in Char-based RNN LM perplexity and the best value of $k$ is shown for all data sets as shown in \ref{tb1: Lighter:Perplexity Vs Alignment}. 
-% SB (1/28/18): Where is the result here? This is a super important result that is missing. We need to show that the value of K chosen by our algorithm leads to the best alignment.
-% Mus: done, I have mentioned Table 2 lighter results.
-% \subsection{RNN versus LSTM Sequential Models}
-% We trained an RNN language model and Long Short Term Memory (LSTM) model with the same number of hidden layers and number of neurons per layer to compare the performance between them. This was done since LSTM is considered the state-of-the-art model in NLP applications. First, we find that the time for training an LSTM is so much longer than an RNN that it is likely infeasible to be used for our problem statement. 
-% % SB (1/28/18): How much longer?
-% % Mus: I gave example for one epoch time in both RNN- LSTM
-% An LSTM epoch is 3 times longer than an RNN epoch (about 12 hours compared to 4 hours) and convergence for one experimental setup takes 5 epochs.
-% Second, we find that the accuracy improvement with LSTM is not significant over RNN. For example, on the validation data set, it gives only a 9\% perplexity improvement over RNN. This is shown in Table \ref{tb:LSTM Vs RNN}. 
-% As a result, we continue using RNN as our language model. 
-% % SB (1/28/18): We have not introduced earlier the notion of ``sentences'' in our context. 
-% % Mus: done
-
-% \begin{table}
-% \begin{center}
-%  \begin{tabular}{|c | c | c|} 
-%  \hline
-%  Data set & LSTM perplexity  & RNN perplexity  \\ [0.5ex] 
-%  \hline
-%  D3 & 3.996 & 4.286  \\ 
-%  \hline
-% \end{tabular}
-% \end{center}
-% \caption {A comparison of average perplexity on validation data set (\ie, 5\% of D3) using two different trained language models. The small improvement in accuracy of LSTM over RNN does not justify its much longer training and prediction times.}
-% \label{tb:LSTM Vs RNN}
-% \end{table}
-
-\vspace{-12pt}
-\subsection{Impact on assembly quality}
-\vspace{-5pt}
-
-Here we show the impact of tuning EC tools on genome assembly quality. We use Velvet \cite{zerbino2008velvet} to perform the assembly and QUAST \cite{gurevich2013quast} to evaluate the assembly quality. We compare the NG50 before and after correction done by RACER using the best GL found by \name. The results (Table \ref{tbl:Fiona_5_datasets_Correlation_N_Gram}) show a significant improvement on NG50 by 2.26X, 46X, 4X, 7.27X, and 15X. These improvements are consistent with what was reported in \cite{heydari2017evaluation} and \cite{greenfield2014blue}.
 \vspace{-12pt}
 \subsection{Comparison with Self-tuning EC Tool}
 \vspace{-5pt}
-Here, we compare \name with the EC tool, Fiona \cite{schulz2014fiona}, which estimates parameters automatically. The purpose of this comparison is to show that \name can tune $k$-mer-based approaches (\eg RACER) to achieve comparable performance to suffix array-based approaches (\eg Fiona), reducing the gap between the two approaches. \cite{yang2012survey} and \cite{molnar2014correcting} show a similar comparison between different EC approaches concluding that the automatic selection of configuration parameters, based on the datasets, is crucial for EC performance.
- Table \ref{tbl:Fiona_5_datasets_Correlation_N_Gram} presents the overall alignment rate for our 5 evaluation datasets, calculated after doing correction by Fiona. We notice that RACER (when tuned with \name) outperforms automatic tuning by Fiona in 3 of the 5 datasets, while they were equal in one dataset using RACER (the most accurate EC tool) with GL tuning. Finally, Fiona is only better on $D_{5} $ by $0.05\%$, which is not significant.  
+Here, we compare \name with the EC tool, Fiona \cite{schulz2014fiona}, which estimates parameters automatically.
+% SB (11/4/18): Does it estimate one or multiple parameters? Are these similar to the parameters that we tune automatically in \name?
+The purpose of this comparison is to show that \name can tune $k$-mer-based approaches (RACER specifically for this experiment) to achieve comparable performance to suffix array-based approaches (\eg Fiona), reducing the gap between the two approaches.
+% SB (11/4/18): The above hints that suffix array-based approaches are better at EC than k-mer based approaches. 
+\cite{yang2012survey} and \cite{molnar2014correcting} show a similar comparison between different EC approaches concluding that the automatic selection of configuration parameters, based on the datasets, is crucial for EC performance.
+% SB (11/4/18): However, they do not perform such parameter tuning automatically. Verify and then add in. 
+ Table \ref{tbl:Fiona_5_datasets_Correlation_N_Gram} presents the overall alignment rate for our 5 evaluation datasets, calculated after doing correction by Fiona. We notice that RACER, when tuned with \name, outperforms automatic tuning by Fiona in 3 of the 5 datasets, while they were equal in one dataset. Finally, Fiona is only better on $D_{5} $ by $0.05\%$, which may be deemed insignificant.  
 
 
+\vspace{-12pt}
+\subsection{Impact on Assembly Quality}
+\vspace{-5pt}
+
+Here we show the impact of tuning EC tools on genome assembly quality. We use Velvet \cite{zerbino2008velvet} to perform the assembly and QUAST \cite{gurevich2013quast} to evaluate the assembly quality. We compare the NG50 before and after correction done by RACER using the best GL found by \name. The results (Table \ref{tbl:Fiona_5_datasets_Correlation_N_Gram}) show a significant improvement on NG50 by 2.26X, 46X, 4X, 7.27X, and 15X. For D1, the improvement in NG50 before and after EC is the lowest, since D1 contains the least fraction of errors to start with. 
+These improvements are consistent with what was reported in \cite{heydari2017evaluation} and \cite{greenfield2014blue}. In these prior works, improvement in genomic assembly was measured due to the use of error correction tools
+% (same as ours or different?)
+with manually tuned configuration parameters.
+% SB (11/4/18): Verify above sentence.
+
+
+\vspace{-5pt}
+\subsection{Search time improvement with \name}
+\vspace{-5pt}
+% SB (1/28/18): I don't understand this. Need to rewrite after sitting down and understanding. 
+% This includes time to run for different k values? But this says "average runtime for evaluating
+% the quality of correction using N-Gram language model versus the average
+% runtime of performing alignment (using Bowtie2 tool [14]).
+% This seems to me to be comparing apples and oranges. 
+
+\begin{table}[H]
+\centering
+\caption {Search time comparison for estimating the perplexity metric with \name (N-gram) for a point in search space \textit{vs}. estimating overall alignment rate with Bowtie2 }%6.2X, 4.8X, 4.7X, 3.6X, and 5.82X, improvements, respectively.}
+\scalebox{0.83}{
+\begin{tabular}{ |c|c|c|c|c|c|c|c|c|c| }
+\hline
+\multicolumn{10}{|c|}{\textbf{Dataset}}\\
+\hline
+ \multicolumn{2}{|c|}{\textbf{D1}} & \multicolumn{2}{|c|}{\textbf{D2}} & \multicolumn{2}{|c|}{\textbf{D3}} & \multicolumn{2}{|c|}{\textbf{D4}} & \multicolumn{2}{|c|}{\textbf{D5}}\\
+  \hline
+Athena & Bowtie2 & Athena & Bowtie2 & Athena & Bowtie2 & Athena & Bowtie2 & Athena & Bowtie2 \\ 
+ \hline
+1m 38s & 10m 5s  &  49s & 3m 53s &  1m 39s & 7m 50s &  52s & 3m 8s &  1m 40s & 9m 42s\\ 
+ \hline
+\end{tabular}}
+%\end{center}
+\label{tbl:N_Gram_Run_Time_Vs_Bowtie}
+\end{table}
+
+Consider that in our problem statement, we are trying to search through a space of configuration parameters in order to optimize a metric (EC Gain or Alignment Rate). The search space can be large and since the cost of searching shows up as a runtime delay, it is important to reduce the time that it takes to evaluate that metric of each search point. In today's state-of-the-art, to find the best value of a configuration parameter~\cite{chikhi2013informed, mahadik2017scalable}, \eg $k$-value, the method would be to pick a $k$ (a single point in the space), run the EC tool with that value, then perform alignment (with one of several available tools such as Bowtie2), and finally compute the metric (alignment rate or EC gain) for that value. In contrast, with \name, to explore one point in the search space, we run the EC algorithm with the $k$-value, and then compute the perplexity metric, which does not involve the time consuming step of alignment. Here, we evaluate the relative time spent in exploring one point in the search space using \name vis-$\grave{a}$-vis the baseline, the state-of-the-art. The result is shown in Table \ref{tbl:N_Gram_Run_Time_Vs_Bowtie}. For this comparison, the alignment is done by Bowtie2~\cite{langmead2012fast}. We find that using the baseline approach, each step in the search takes respectively 6.2X, 4.8X, and 4.7X, 3.6X, and 5.82X for the 5 datasets respectively. Further, while we use the hill-climbing technique to search through the space, today's baseline methods use exhaustive search, such as in Lighter~\cite{song2014lighter} and thus the end-to-end runtime advantage of \name will be magnified. 
+% In this experiment, we demonstrate the advantage of using the perplexity metric in tuning the value of $k$ even in cases where a reference genome exists. We show that using the trained language models can reduce the training time greatly compared to applying the alignment phase for each investigated value of $k$. Table \ref{tbl:N_Gram_Run_Time_Vs_Bowtie} shows the average runtime for evaluating the quality of correction using N-Gram language model versus the average runtime of performing alignment (using Bowtie2  tool \cite{langmead2012fast}). The results show a reduction of 0.16x, 0.21x, and 0.19x for the three data sets described in Table \ref{tbl:N_Gram_Run_Time_Vs_Bowtie}.
+% SB (1/28/18): Reduction of 16\%, 21\%, and 19\%?
+
+% SB (1/28/18): All the material in this paragraph should be moved and merged with what we have at point [A] (see above in this section).
+% Mus: done
+
+% Therefore, the validation perplexity is computed on unseen data during training. Each epoch has a checkpoint that evaluates the perplexity of the language model over validation data set. We found that about ``5'' epochs are enough to have saturation of perplexity using our validation data set. Finally, we choose the checkpoint, named the best model , with the least perplexity, which gave us the best trained language model.
 
 % \item Compare the error correction performance w.r.t the selected value of K to \textit{KMERGENIE}, which has been proposed in \cite{chikhi2013informed}
 % \end{enumerate}
