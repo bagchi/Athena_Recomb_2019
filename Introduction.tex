@@ -67,6 +67,7 @@ However, a reference genome is typically needed to serve as ground truth for eva
 % SB (5/21/18): But de novo does not need reference genome. Likelihood based metrics are calculated without taking recourse to a reference genome. 
 To the best of our knowledge, existing tools leave the best parameter choice to the end user~\cite{peng2010idba, mahadik2017scalable}, while few others provide intuitive histograms or heuristics to assist in the decision process~\cite{chikhi2013informed}.
 % SB (11/3/18): Add one or two more citations that provide such help. 
+% Mus(11/3/18): To our knoweldge, Kmergnie is the one which provides help. Will check again.
 Thus, the need for a data-driven method to select the optimal $k$-value is crucial. 
 \SBcomment{Provide a motivating quantitative result - one value of k good for one dataset gives really bad result with another dataset.} \AMcomment{For example, we found that $k$=25 gives the best performance for D5 using Lighter. However, if the same value of $k$ was used for D1, the Gain drops from 96.3\% (with $k$ = 17) to 69.96\% (See table \ref{tb1:Lighter-Perplexity-vs-Alignment} in APPENDIX).}
 Our solution, {\em \name}\footnote{Just as \textit{Athena} is the Greek Goddess of wisdom and a fierce warrior, we wish our technique to unearth the genomic codes underlying disease in a fearless war against maladies.} finds the best value of the configuration parameters
