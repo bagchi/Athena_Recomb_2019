@@ -26,8 +26,8 @@ We train an N-Gram model \cite{brown1992class}, which is word-based, from the in
 %\SCcomment{likelihood of new sequences, you mean?}
 % Mus: Done.
 
-\noindent \textbf{RNN Language Models}: The second technique is RNN-based, using different RNN architectures, \eg standard RNNs, LSTMs, and GRUs.
-These models can be trained either as word-based models or character-based models. We train them as character-based models to avoid having to make the decision about how to segment the genomic string, as we have to do for the N-Gram model.
+\noindent \textbf{RNN Language Models}: The second technique is RNN-based LM \cite{kombrink2011recurrent}, using different RNN architectures, \eg standard RNNs, LSTMs, and GRUs.
+These models can be trained either as word-based models or character-based models. We train our RNN variant as character-based models to avoid having to make the decision about how to segment the genomic string, as we have to do for the N-Gram model.
 % We build over the TensorFlow platform for our implementation \cite{45381}.
 % SB (11/4/18): Moved to result section.
 % Mus(11/4/18): Thanks.
@@ -37,13 +37,14 @@ These models can be trained either as word-based models or character-based model
 \SBcomment{Expand on these two approaches. They are a key part of our novelty story. 
 For each technique: 
 (1) Basic approach - the Recomb reviewer will not be familiar with this. 
-(2) What we have to do to adapt it to our problem space. 
-(3) What are the other design choices possible and why we did not make them.}
+(2) What we have to do to adapt it to our problem space.}
+\SCcomment{(3) What are the other design choices possible and why we did not make them.}
 
-Although N-Gram LMs are much faster compared to RNN-based models, they still have the requirement of splitting a read into words of specific length.
+\noindent{Contrasting our 2 LM variants:} Although N-Gram LMs are much faster compared to RNN-based models, they still have the requirement of splitting a read into words of specific length.
+\SCcomment{how much faster}
 %\SCcomment{is this pre-processing phase time-consuming or what is the exact problem, specify.}
 %\AMcomment{This phase is not time consuming at all, but deciding the word length is somewhat related to finding the k-mer size (see section 3.1 in "A careful reader")} ok
-Further, RNN-based models have much lower memory footprint and storage requirements relative to N-Gram. This is because N-Gram models need to store conditional probabilities in large tables (average size of 0.6-1.1 GB across the 5 datasets), while RNNs only need to store the network architecture and  weights (average size of 3-5 MB across the 5 datasets). 
+Further, RNN-based models have much lower memory footprint and storage requirements relative to N-Gram. This is because N-Gram models need to store conditional probabilities in large tables with an average size of 0.6--1.1 GB across the 5 datasets. In contrast, RNNs only need to store the network architecture and  weights with an average size of 3--5 MB across the 5 datasets). 
 %\SCcomment{remember to fill out the XXX}
 % SB (1/28/18): We do not say how we break this circular problem. That can be mentioned here or just above when we introduced the N-gram based model.
 % From our results, we see that both \name variants efficiently guide the EC algorithm toward selecting the most appropriate configuration parameters (\eg $k$). 

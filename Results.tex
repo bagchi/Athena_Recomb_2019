@@ -55,8 +55,9 @@ The five datasets have different read lengths (from 36bp in D1\&D3 to 100pb in D
 \vspace{-8pt}
 The results of using \name with Lighter, Blue, and RACER tools are shown in Table \ref{tb1:Lighter-Blue-Racer-Perplexity-vs-Alignment} for each dataset. In the third column, the value of $k$ (or, GL for RACER) in bold is the one that gives the best assembly quality, evaluated using ground truth.
 % SB (11/4/18): The above sentence will change based on restructuring of the table according to my comment in the table. 
-We see that this almost always corresponds to the lowest perplexity scores computed using \name's language modeling. %(values in bold in the 4th and 5th columns for RNN and N-gram models). 
+We see that this almost always corresponds to the lowest perplexity scores computed using \name's language modeling (Table \ref{tb1:Lighter-vs-Blue-vs-Racer-Perplexity-vs-Alignment}). %(values in bold in the 4th and 5th columns for RNN and N-gram models). 
 % SB (11/4/18): But the reader cannot see because the table does not show it. If true, then say (not shown in the table). 
+% Mus(11/5/18): It is on Large Table on Appendix. I referred to that Table.
 In the cases where the lowest perplexity does not correspond to the best assembly quality (this happens in 3 of the 10 cases aggregated between Lighter and Blue), the difference in overall alignment rate is small, less than 0.27\% in the worst case.  
 %\SCcomment{assembly quality of overall alignment rate?}
 Further, the anti-correlation between perplexity and alignment rate holds for both optimal and non-optimal $k$-values. 
@@ -105,8 +106,6 @@ Second, we compare the perplexity metric for datasets corrected with different $
 We always report the \textit{average perplexity}, which is just the total perplexity averaged across all words.
 Our results show a high negative correlation ($\leq$ -0.946) between the two  metrics on the 5 datasets, as shown in Table \ref{tbl:Fiona_5_datasets_Correlation_N_Gram}. %The negative value of the correlation is because of the expected inverse relationship between the perplexity metric and the alignment rate. 
 To reiterate, the benefit of using the perplexity metric is that it can be computed without the ground truth and even where a reference genome is available, it is more efficient than aligning to the reference and then computing the alignment rate. 
-
-% SB (1/29/18): To repeat above point in introduction.
 
 % SB (11/4/18): Put exhaustive search first. Then for Athena (N-gram) if it is the same as exhaustive search, just say "SAME as Exhaustive". Same for Athena (RNN). This way the reader does not have to pore through 3 sets of numbers and figure out that they are the same. So for Athena columns only give the numbers if they are different.
 % SB (11/4/18): Rows 1 and 2 should be flipped. That means "With Athena (N-gram)" Etc should go above "Lighter". 
@@ -209,8 +208,9 @@ To reiterate, the benefit of using the perplexity metric is that it can be compu
 \vspace{-8pt}
 \subsection{Char-RNN Language Model Results}
 % SB (1/28/18): Point [A] - for reference later on for moving some material here. % Mus: done
-For training our RNN, we used the ``tensorflow-char-rnn'' library~\cite{45381}. After parameter tuning, we use the following for our experiments: 2 hidden layers with 300 neurons per layer, mini-batch size, and learning rate of 200 and $2 e^{-3}$ respectively.
+For training our RNN, we used the ``tensorflow-char-rnn'' library~\cite{45381}. After parameter tuning, we use the following for our experiments: 2 hidden layers with 300 neurons per layer, output layer with size 4 (i.e., corresponding to the four characters(A,C,G, and T)) mini-batch size, and learning rate of 200 and $2 e^{-3}$ respectively.
 % SB (11/4/18): Size of input layer, output layer? 
+% Mus(11/5/18): Done.
 For each of the 5 datasets, we used 90\% for training, 5\% for validation, and 5\% for testing, with no overlap.
 % SB (1/29/18): Did we use k-fold cross validation?
 %% We used 2 EC tools, Lighter and Blue, in default mode, with \name automatically tuning $k$, demonstrating \name's extensibility. This is in line with our vision to design extensible blocks of software to expedite algorithmic development~\cite{mahadik2016sarvavid}. 
