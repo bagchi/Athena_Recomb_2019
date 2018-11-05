@@ -48,7 +48,7 @@ We apply an existing EC algorithm (\eg Lighter or Blue) with different initial v
 %\SCcomment{use small font for algo}.
 
 
-\begin{minipage}[t]{.4\textwidth}
+\begin{minipage}[t]{.45\textwidth}
 %\begin{table}
 \begin{algorithm}[H]
 \caption{Correct Set of Reads}
@@ -61,18 +61,18 @@ We apply an existing EC algorithm (\eg Lighter or Blue) with different initial v
 \item Select random sample $S'$ from original dataset $D_{0}$.
 \item Pick $k_0$,$k_1$,...,$k_m$: initial values of $k$ in the range of (1, L).
 \item for i in the range (0, m) 
-\item \quad Call \textbf{Find Optimal $K_i$}($D_{0}$, L, LM, IterMax, $k_i$)
+\item \quad Call \textbf{Find Optimal $K_i$}($S'$, L, LM, IterMax, $k_i$)
 \item Take $k$ as the argmin of $K_i$ values picked at step 5 and do a complete correction on the whole dataset.
 \end{enumerate}
 \end{algorithmic}
 \end{algorithm}
 \end{minipage}
-\hfill\vline\hfill
-\begin{minipage}[t]{.4\textwidth}
+\hfill
+\begin{minipage}[t]{.45\textwidth}
 \begin{algorithm} [H]
 \caption{Find Optimal $k$}
 \begin{algorithmic} 
-\REQUIRE Data set: $D_{0}$, Read Length: L, Language Model: LM, MaxNumOfIterations: IterMax, Initial value of $k$: $k_i$ 
+\REQUIRE Data set: $S'$, Read Length: L, Language Model: LM, MaxNumOfIterations: IterMax, Initial value of $k$: $k_i$ 
 %Range start: S, Range end: E
 \ENSURE $Best k: k*$
 %\scalebox{0.85}{

@@ -56,58 +56,58 @@ To reiterate, the benefit of using the perplexity metric is that it can be compu
 \centering
  \caption {Comparison of Lighter, Blue, and RACER using 5 datasets. This is for finding the best $k$-value (GL for RACER) using \name variants \textit{vs.} exhaustive search. We find either the optimal value or within 0.27\% (over Alignment Rate) and within 8.5\% (EC Gain) of the theoretical best (in the worst case), consistent with the reported results by Lighter (Figure 5 in \cite{song2014lighter}). We also notice that for RACER, GL found by \name is within 3\% of the reference GL (except for the RNN model with D5, which still achieves very close performance for both Alignment Rate and EC Gain.)} 
  %\SCcomment{is something wrong here, GL = 20M? ..for d5, racer, rnn}
-\scalebox{0.83}{
+\scalebox{0.75}{
 \small
 \begin{tabular}{ |c|c|c|c|c|c|c|c|c|c| } 
 \hline
 \multicolumn{10}{|c|}{\textbf{Lighter}}\\
 \hline
-{Dataset} & \multicolumn{3}{c|}{With \name (N-gram)}& \multicolumn{3}{c|}{With \name (RNN)} & \multicolumn{3}{c|}{\makecell{Exhaustive Search}} \\ 
+{\textbf{Dataset}} & \multicolumn{3}{c|}{\textbf{With \name (N-gram)}}& \multicolumn{3}{c|}{\textbf{With \name (RNN)}} & \multicolumn{3}{c|}{\makecell{\textbf{Exhaustive Search}}} \\ 
  \hline
- 					 & \makecell{Selected\\ $k$} & \makecell{Alignment\\ Rate}& Gain (\%) & \makecell{Selected \\ $k$} & \makecell{Alignment\\ Rate}& Gain (\%) & \makecell{Selected \\ $k$} & \makecell{Alignment\\ Rate}& Gain (\%) 
+ 					 & \makecell{\textbf{Selected}\\ \textbf{$k$}} & \makecell{\textbf{Alignment}\\ \textbf{Rate(\%)}}& \textbf{Gain (\%)} & \makecell{\textbf{Selected} \\ \textbf{$k$}} & \makecell{\textbf{Alignment}\\ \textbf{Rate(\%)}}& \textbf{Gain (\%)} & \makecell{\textbf{Selected} \\ \textbf{$k$}} & \makecell{\textbf{Alignment}\\ \textbf{Rate(\%)}}& \textbf{Gain (\%)} 
 \\ \hline
- 					 D1 & \textbf{k=17} & \textbf{98.95}\% & \textbf{96.3}\% & \textbf{k=17} & \textbf{98.95}\% & \textbf{96.3}\%  & \textbf{k=17} & \textbf{98.95}\% & \textbf{96.3}\%
+ 					 \textbf{D1} & \textbf{k=17} & \textbf{98.95}\% & \textbf{96.3}\% & \textbf{k=17} & \textbf{98.95}\% & \textbf{96.3}\%  & \textbf{k=17} & \textbf{98.95}\% & \textbf{96.3}\%
 \\ \hline
                           %&  & k = 8 &  204.849 &  121.88 & 56.9\% \\ 
-     					  D2 & \textbf{k=17} & 61.15\% & \textbf{80.1}\% & \textbf{k=17} & 61.15\% & \textbf{80.1}\% & k=15 & \textbf{61.42\%} & 73.8\% 
+     					  \textbf{D2} & \textbf{k=17} & \textbf{61.15\%} & \textbf{80.1\%} & \textbf{k=17} & \textbf{61.15\%} & \textbf{80.1\%} & k=15 & \textbf{61.42\%} & \textbf{73.8}\% 
 \\ \hline
  					      %&  & k = 8 &  200.513 &  52.82 & 72.91\% \\ 
-     				 D3 & \textbf{k=17} &  80.39\% & \textbf{95.34\%} & k=15 & \textbf{80.44\%} & 86.78 \% & k=15 & \textbf{80.44\%} & 86.78 \% 
+     				 \textbf{D3} & \textbf{k=17} &  \textbf{80.39\%} & \textbf{95.34\%} & \textbf{k=15} & \textbf{80.44\%} & \textbf{86.78 \%} & \textbf{k=15} & \textbf{80.44\%} & \textbf{86.78 \%} 
 \\ \hline                        
-                         D4 & \textbf{k=17} & \textbf{93.95}\% & \textbf{89.87\%} &
-                         \textbf{k=17} & \textbf{93.95}\% & \textbf{89.87\%} &
-                         \textbf{k=17} & \textbf{93.95}\% & \textbf{89.87}\%
+                        \textbf{D4} & \textbf{k=17} & \textbf{93.95}\% & \textbf{89.87\%} &
+                         \textbf{k=17} & \textbf{93.95\%} & \textbf{89.87\%} &
+                         \textbf{k=17} & \textbf{93.95\%} & \textbf{89.87\%}
 \\ \hline                           
-                         D5 & \textbf{k=17} & \textbf{92.15}\% & \textbf{81.7\%} & k = 15 & \textbf{92.11\%} & 73.12\% &
+                         \textbf{D5} & \textbf{k=17} & \textbf{92.15\%} & \textbf{81.7\%} & \textbf{k = 25} & \textbf{92.09\%} & \textbf{83.8\%} &
                          \textbf{k=17} & \textbf{92.15}\% & \textbf{81.7\%} \\
   \hline
   \multicolumn{10}{|c|}{\textbf{Blue}}\\
   \hline
- 					 D1 & \textbf{k=20} & \textbf{99.53}\% & \textbf{99\%} & k=25 & 99.29\% & 98.6\% & \textbf{k=20} & \textbf{99.53}\% & \textbf{99\%}
+ 					 \textbf{D1} & \textbf{k=20} & \textbf{99.53}\% & \textbf{99\%} & \textbf{k=25} & \textbf{99.29\%} & \textbf{98.6\%} & \textbf{k=20} & \textbf{99.53}\% & \textbf{99\%}
 \\ \hline
                           %&  & k = 8 &  204.849 &  121.88 & 56.9\% \\ 
-     					  D2 & \textbf{k=20} & 57.44\% & 4.61\% & \textbf{k=20} & 57.44\% & 4.61\% & \textbf{k=20} & 57.44\% & 4.61\% 
+     					  \textbf{D2} & \textbf{k=20} & \textbf{57.44\%} & \textbf{4.61\%} & \textbf{k=20} & \textbf{57.44\%} & \textbf{4.61\%} & \textbf{k=20} & \textbf{57.44\%} & \textbf{4.61\%} 
 \\ \hline
  					      %&  & k = 8 &  200.513 &  52.82 & 72.91\% \\ 
-     				 D3  & \textbf{ k=20} & 84.17\% & 99.2\% & \textbf{k=20} & 84.17\% & 99.2\% & \textbf{k=20} & 84.17\% & 99.2\% 
+     				 \textbf{D3}  & \textbf{ k=20} & \textbf{84.17\%} & \textbf{99.2\%} & \textbf{k=20} & \textbf{84.17\%} & \textbf{99.2\%} & \textbf{k=20} & \textbf{84.17\%} & \textbf{99.2\%} 
 \\ \hline                        
-                         D4 & \textbf{ k=20} & 95.31\% & 98.5\% & \textbf{ k=20} & 95.31\% & 98.5\% & \textbf{ k=20} & 95.31\% & 98.5\%
+                         \textbf{D4} & \textbf{ k=20} & \textbf{95.31\%} & \textbf{98.5\%} & \textbf{ k=20} & \textbf{95.31\%} & \textbf{98.5\%} & \textbf{ k=20} & \textbf{95.31\%} & \textbf{98.5\%}
 \\ \hline                           
-                         D5 & \textbf{ k=20} & 92.33\% & 88.9\% & \textbf{ k=20} & 92.33\% & 88.9\% & \textbf{ k=20} & 92.33\% & 88.9\%\\
+                         \textbf{D5} & \textbf{ k=20} & \textbf{92.33\%} & \textbf{88.9\%} & \textbf{ k=20} & \textbf{92.33\%} & \textbf{88.9\%} & \textbf{ k=20} & \textbf{92.33\%} & \textbf{88.9\%}\\
   \hline
   \multicolumn{10}{|c|}{\textbf{RACER}}\\
   \hline
-                         D1 & \textbf{GL=4.7} & 99.26\% & 84.8\% & \textbf{GL=4.7} & 99.26\% & 84.8\% & \textbf{GL=4.7} & 99.26\% & 84.8\%\\ 
+                         \textbf{D1} & \textbf{GL=4.7} & \textbf{99.26\%} & \textbf{84.8\%} & \textbf{GL=4.7} & \textbf{99.26\%} & \textbf{84.8\%} & \textbf{GL=4.7} & \textbf{99.26\%} & \textbf{84.8\%}\\ 
  \hline
                           %&  & k = 8 &  204.849 &  121.88 & 56.9\% \\ 
-     					  D2 & \textbf{GL=4.7M} & 81.15\% & 92.9\% & \textbf{GL=4.7M} & 81.15\% & 92.9\% & \textbf{GL=4.7M} & 81.15\% & 92.9\%
+     					  \textbf{D2} & \textbf{GL=4.7M} & \textbf{81.15\%} & \textbf{92.9\%} & \textbf{GL=4.7M} & \textbf{81.15\%} & \textbf{92.9\%} & \textbf{GL=4.7M} & \textbf{81.15\%} & \textbf{92.9\%}
 \\ \hline
  					      %&  & k = 8 &  200.513 &  52.82 & 72.91\% \\ 
-     				 D3  & \textbf{GL=3.7M} & 84.11\% & 88.27\%  & \textbf{GL=3.7M} & 84.11\% & 88.27\% & \textbf{GL=3.7M} & 84.11\% & 88.27\%
+     				 \textbf{D3}  & \textbf{GL=3.7M} & \textbf{84.11\%} & \textbf{88.27\%}  & \textbf{GL=3.7M} & \textbf{84.11\%} & \textbf{88.27\%} & \textbf{GL=3.7M} & \textbf{84.11\%} & \textbf{88.27\%}
 \\ \hline                        
-                         D4 & \textbf{GL=4.2M} & 95.33\% & 97\% & \textbf{GL=4.2M} & 95.33\% & 97\% & \textbf{GL=4.2M} & 95.33\% & 97\%
+                         \textbf{D4} & \textbf{GL=4.2M} & \textbf{95.33\%} & \textbf{97\%} & \textbf{GL=4.2M} & \textbf{95.33\%} & \textbf{97\%} & \textbf{GL=4.2M} & \textbf{95.33\%} & \textbf{97\%}
 \\ \hline                           
-                         D5 & \textbf{GL=4.2M} & 92.29\% & 81.63\% & \textbf{GL=20M} & 92.28\% &  80.5\% & \textbf{GL=4.2M} & 92.29\% & 81.63\%
+                         \textbf{D5} & \textbf{GL=4.2M} & \textbf{92.29\%} & \textbf{81.63\%} & \textbf{GL=20M} & \textbf{92.28\%} &  \textbf{80.5\%} & \textbf{GL=4.2M} & \textbf{92.29\%} & \textbf{81.63\%}
   \\ \hline 
   \end{tabular}}
 \label{tb1:Lighter-Blue-Racer-Perplexity-vs-Alignment}
@@ -185,17 +185,17 @@ Consider that in our problem statement, we are trying to search through a space 
 % Therefore, the validation perplexity is computed on unseen data during training. Each epoch has a checkpoint that evaluates the perplexity of the language model over validation data set. We found that about ``5'' epochs are enough to have saturation of perplexity using our validation data set. Finally, we choose the checkpoint, named the best model , with the least perplexity, which gave us the best trained language model.
 \begin{table}[H]
 \centering
-\caption {Comparison of Overall Alignment Rate between Fiona's and RACER's (with and without \name's tuning). The last two columns demonstrate the strong anti-correlation values between Perplexity and Alignment Rate.}
+\caption {Comparison of Overall Alignment Rate between Fiona's and RACER's (with and without \name's tuning). Columns 5 \& 6 demonstrate the strong anti-correlation values between Perplexity and Alignment Rate. The last two columns show the assembly quality (in terms of NG50) before and after correction by Racer tuned with \name. Improvements in NG50 are shown between  parentheses}
 \scalebox{0.85}{
-\begin{tabular}{ |c|c|c|c|c|c| }
+\begin{tabular}{ |c|c|c|c|c|c|c|c| }
 \hline
-\makecell{Dataset} & \makecell{Fiona} & \makecell{RACER \\ w/o \name \\ + Bowtie2} & \makecell{RACER \\ with \name \\ + Bowtie2}& \makecell{Correlation \\ (N-Gram)} & \makecell{Correlation \\ (RNN)} \\ 
+\makecell{Dataset} & \makecell{Fiona} & \makecell{RACER \\ w/o \name \\ + Bowtie2} & \makecell{RACER \\ with \name \\ + Bowtie2}& \makecell{Correlation \\ (N-Gram)} & \makecell{Correlation \\ (RNN)} & \makecell{NG50 \\ before \\ correction} & \makecell{NG50 \\ after \\ correction with \\ (Racer+\name)} \\ 
 \hline
-D1 &  99.25\% & 85.01\% & \textbf{99.26}\% &  -0.977 & -0.938 \\
-D2 &  73.75\% & 58.66\% & \textbf{81.15}\%&  -0.981 & -0.969 \\
-D3 &  83.12\% & 80.79\% & \textbf{84.11}\% &  -0.982 & -0.968 \\
-D4 &  95.33\% & 93.86\% &	95.33\% &  -0.946 & -0.930 \\
-D5 &  \textbf{92.34}\% & 90.91\% &	92.29\% &  -0.970 & -0.962\\
+D1 &  99.25\% & 85.01\% & \textbf{99.26}\% &  -0.977 & -0.938 & 3019 & 6827 (2.26X)\\
+D2 &  73.75\% & 58.66\% & \textbf{81.15}\%&  -0.981 & -0.969 & 47 & 2164 (46X) \\
+D3 &  83.12\% & 80.79\% & \textbf{84.11}\% &  -0.982 & -0.968 & 1042 & 4164 (4X) \\
+D4 &  95.33\% & 93.86\% &	95.33\% &  -0.946 & -0.930 & 118 & 858 (7.27X) \\
+D5 &  \textbf{92.34}\% & 90.91\% &	92.29\% &  -0.970 & -0.962 & 186 & 2799 (15X) \\
 \hline
 \end{tabular}}
 \label{tbl:Fiona_5_datasets_Correlation_N_Gram}
@@ -309,6 +309,11 @@ In addition, we see that \name can be applied to a different configuration param
 % \label{tb:LSTM Vs RNN}
 % \end{table}
 
+\vspace{-12pt}
+\subsection{Impact on assembly quality}
+\vspace{-5pt}
+
+Here we show the impact of tuning EC tools on genome assembly quality. We use Velvet \cite{zerbino2008velvet} to perform the assembly and QUAST \cite{gurevich2013quast} to evaluate the assembly quality. We compare the NG50 before and after correction done by RACER using the best GL found by \name. The results (Table \ref{tbl:Fiona_5_datasets_Correlation_N_Gram}) show a significant improvement on NG50 by 2.26X, 46X, 4X, 7.27X, and 15X. These improvements are consistent with what was reported in \cite{heydari2017evaluation} and \cite{greenfield2014blue}.
 \vspace{-12pt}
 \subsection{Comparison with Self-tuning EC Tool}
 \vspace{-5pt}

@@ -11,10 +11,11 @@ While next-generation sequencing (NGS) techniques allow for rapid parallel seque
 In addition, sequencing platforms generate reads with different error profiles, including incorrect base replacements, insertions, deletions, etc. The current bottleneck of NGS projects is not the DNA sequencing process itself but the structured data management and sophisticated computational analysis downstream \cite{schadt2010computational}. In order to get biologically meaningful results, each step of the analysis workflow needs to be analyzed so errors are not magnified along the analysis pipeline.
 % differing in size or copy number.
 % SB (1/27/18): It may be better to talk of ``next generation sequencing'' than ``shotgun sequencing'' since our solution is even more applicable there. 
-Consequently, multiple error-correction (EC) techniques have been developed to correct NGS reads in order to improve downstream applications, including genome assembly and variant calling \cite{szalay2015novo}. 
+Consequently, multiple error-correction (EC) techniques have been developed to correct NGS reads in order to improve downstream applications, \eg, genome assembly \cite{mahadik2017scalable}, variant calling, and iterative k-mer selection for long-read error correction \cite{szalay2015novo, sameith2016iterative}. 
+%Genomic read correction is computationally expensive, especially for short-read sequencing ($\leq$ 100-bp long), requiring high sequencing coverage, and with common applications in metagenomics and meta-transcriptomics \cite{meyer2017mg,chaterji2017federation}.
 
-Genomic read correction is computationally expensive, especially for short-read sequencing ($\leq$ 100-bp long), requiring high sequencing coverage, and with common applications in metagenomics and meta-transcriptomics \cite{meyer2017mg,chaterji2017federation}.
 % SB (11/3/18): Why is EC expensive for short-read sequencing? I think the relevant factor is how many base pairs are in the read set. So if we have short-read sequencing and high coverage, that leads to large number of base pairs and hence short-read sequencing in expensive then. But it does not have to do with short-read sequency per se.
+% Mus(11/3/18): You are right, Statement is not generally correct.
 % SB (11/3/18): I do not understand the relevance of the part ``and with common applications ...''.
 The performance of many EC algorithms is highly dependent on the proper choice of configuration parameters, such as the value of $k$ (length of the substring) in \textit{k}-spectrum-based techniques \cite{mahadik2017scalable}, where the original genomic reads are split into overlapping sub-strings of size $k$. By extracting these $k$-mers from sequenced reads, an efficient \textit{de Bruijn} Graph (DBG) \cite{compeau2011apply} can be built for genome assembly. Selecting different values of $k$ has a trade-off. Having small values of $k$ increases the overlap probability between reads. However, an unsuitably small value of $k$ degrades the EC performance because it does not allow the algorithm to discriminate between correct and erroneous $k$-mers. On the other hand, having unsuitably high $k$-values decreases the overlap probability and hurts EC performance \cite{sameith2016iterative}. This is because most $k$-mers will appear unique and thus not allow us to distinguish legitimate and erroneous $k$-mers. 
 The $k$-mers that appear above a certain threshold frequency, and are therefore expected to be legitimate, are called \textit{solid k-mers}. The others are called \textit{insolid or untrusted $k$-mers}. (In $k$-spectrum-based methods, the goal is to convert insolid $k$-mers to solid ones with a minimum number of edit operations.) Both increasing or decreasing the overlap probability affects the EC capability and hence, there is an optimum value of $k$ to use. Further, this value changes with the dataset or the organism whose genome is being sequenced \cite{heydari2017evaluation}. Moreover, most EC tools are evaluated based on their direct ability on reducing error rates rather than improving the genome assembly \cite{heydari2017evaluation}. Although the assembly can benefit substantially from EC tools, miscorrected reads can often result in degraded assemblies from formation of incorrect chimera etc. \cite{heydari2017evaluation}.
@@ -28,6 +29,7 @@ The $k$-mers that appear above a certain threshold frequency, and are therefore 
 % Mus: Done.
 Therefore, a data-driven  method for finding the best value of \textit{k} and other configuration parameters is needed for improved error correction, and subsequently, for superior genome alignment, genome assembly, variant calling, and other applications downstream.
 % SB (11/3/18): Added alignment which we do evaluate. 
+%Mus(11/3/18): Makes sense.
 % \SCcomment{we don't evaluate genome assembly, so a little dicey to say this}.
 %\AMcomment{Moreover, several EC tools depend on not a single, but a set of configuration parameters that control the quality of the correction process. For example, Reptile has five performance-sensitive parameters and our technique can optimize the values of multiple configuration parameters, with their dependencies.(CFC as we don't show any exp. with many configs}
 %\SCcomment{\name can model dependencies, right?}\AMcomment{I don't think so}
@@ -63,11 +65,10 @@ Many existing EC solutions (\textit{e.g.}, Reptile \cite{yang2010reptile}, Quake
 However, a reference genome is typically needed to serve as ground truth for evaluation, which makes this approach infeasible for \textit{de novo} sequencing tasks or where a high-quality reference genome is unavailable. 
 %SC(05/21/18): do novo used likelihood-based metrics, so not accurately written above
 % SB (5/21/18): But de novo does not need reference genome. Likelihood based metrics are calculated without taking recourse to a reference genome. 
-To the best of our knowledge, existing tools leave the best parameter choice to the end user~\cite{peng2010idba, mahadik2017scalable}; a small number provide intuitive histograms or heuristics to assist in the decision process~\cite{chikhi2013informed}.
+To the best of our knowledge, existing tools leave the best parameter choice to the end user~\cite{peng2010idba, mahadik2017scalable}, while few others provide intuitive histograms or heuristics to assist in the decision process~\cite{chikhi2013informed}.
 % SB (11/3/18): Add one or two more citations that provide such help. 
-Thus, the need for a data-driven method to select the optimal $k$-value is crucial.
-\SBcomment{Provide a motivating quantitative result - one value of k good for one dataset gives really bad result with another dataset.}
-
+Thus, the need for a data-driven method to select the optimal $k$-value is crucial. 
+\SBcomment{Provide a motivating quantitative result - one value of k good for one dataset gives really bad result with another dataset.} \AMcomment{For example, we found that $k$=25 gives the best performance for D5 using Lighter. However, if the same value of $k$ was used for D1, the Gain drops from 96.3\% (with $k$ = 17) to 69.96\% (See table \ref{tb1:Lighter-Perplexity-vs-Alignment} in APPENDIX).}
 Our solution, {\em \name}\footnote{Just as \textit{Athena} is the Greek Goddess of wisdom and a fierce warrior, we wish our technique to unearth the genomic codes underlying disease in a fearless war against maladies.} finds the best value of the configuration parameters
 for correcting errors in genome sequencing, such as the value of $k$ in $k$-mer based methods. Further, \name does not require access to a reference genome to perform its function of determining the optimal parameter configuration\footnote{In our evaluation, we use Bowtie2 to perform alignment and then measure the alignment rate as the metric to evaluate our solution. But alignment is not needed for \name to work.}. 
 % genome to compute the quality of the corrected reads, although we use Bowtie to align against the reference genome for evaluation.
@@ -89,8 +90,10 @@ in this case specialized to the dataset where genome error correction is to be d
 % \textit{personalized} to a specific genome's ``language''.
 Therefore, it can be used to identify words ($k$-mers here) that do not fit into the context of the language and thus contribute to a high value of the metric called {\em ``perplexity metric''}. This personalization is very beneficial to our problem because the LM then learns the patterns, obvious as well subtle, of the sequenced genome.
 
-In our context, we use LM to estimate the probabilistic likelihood that some observed sequence is solid or insolid. We train an LM using the original dataset (with uncorrected reads), and then use this trained model to compute the perplexity metric when the EC tool is run with a specific configuration, \ie for specific values of its parameters. Although the LM is trained on the uncorrected reads, it can still identify the correct sequences due to the high coverage and overlap between the reads.
+In our context, we use LM to estimate the probabilistic likelihood that some observed sequence is solid or insolid. We train an LM using the original dataset (with uncorrected reads), and then use this trained model to compute the perplexity metric when the EC tool is run with a specific configuration, \ie for specific values of its parameters. 
+%Although the LM is trained on the uncorrected reads, it can still identify the correct sequences due to the high coverage and overlap between the reads.
 % SB (11/3/18): I don't see the relevance of the above sentence. 
+% Mus(11/3/18): Commented it.
 We show empirically that the perplexity metric is inversely correlated to the quality of error correction.
 Crucially, the perplexity metric evaluation does not require the computationally expensive alignment to a reference genome.
 Through a stochastic optimization method, we evaluate the search space to pick the best value of the configuration parameter to guide EC, \eg $k$ in $k$-mer-based methods and the Genome Length (GL) in the RACER EC tool. 
@@ -110,8 +113,10 @@ This latter property will be beneficial for supporting multi-tenant analysis pip
 %\AMcomment{ Which is very benificial for supporting multi-users analysis pipelines such as MG-RAST [Cite XXX]}. %\SCcomment{what is the intuition for this and will faster or lower memory footprint be better for larger or more complex genomes, for example.. add a line to indicate that.}
 \vspace{-8pt}
 
-\item We apply \name to 3 EC tools: Lighter \cite{song2014lighter}, Blue \cite{greenfield2014blue}, and RACER \cite{ilie2013racer}. We show that \name was successful in finding the best parameters ($k$ for Lighter and Blue, and $Genome Length$ for RACER) for 5 different real datasets, with varied error rates and read lengths. The best parameters found by \name performed within 0.27\% in overall alignment rate, compared to the best values using exhaustive search against a reference genome.
+\item We apply \name to 3 EC tools: Lighter \cite{song2014lighter}, Blue \cite{greenfield2014blue}, and RACER \cite{ilie2013racer}. We show that \name was successful in finding either the best parameters ($k$ for Lighter and Blue, and $Genome Length$ for RACER) or parameters that perform within 0.27\% in overall alignment rate to the best values using exhaustive search against a reference genome. We compared the performance of \name with 5 different real datasets, with varied error rates and read lengths. %The best parameters found by \name performed within , compared to the best values using exhaustive search against a reference genome.
 % SB (11/3/18): The two sentences above seem to contradict each other. If we find the best parameters (first sentence), how come we are only close in the alignment rate to the theoretical best (second sentence)? 
+
+% AM (11/4/18): Done
 \end{enumerate}
 
 %SC(05/16/18): for the contributions above, we need to give some numbers, such as the performance numbers in terms of the perplexity metric for example. Quantifiable claims are important.
