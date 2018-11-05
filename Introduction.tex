@@ -65,11 +65,13 @@ Many existing EC solutions (\textit{e.g.}, Reptile \cite{yang2010reptile}, Quake
 However, a reference genome is typically needed to serve as ground truth for evaluation, which makes this approach infeasible for \textit{de novo} sequencing tasks or where a high-quality reference genome is unavailable. 
 %SC(05/21/18): do novo used likelihood-based metrics, so not accurately written above
 % SB (5/21/18): But de novo does not need reference genome. Likelihood based metrics are calculated without taking recourse to a reference genome. 
-To the best of our knowledge, existing tools leave the best parameter choice to the end user~\cite{peng2010idba, mahadik2017scalable}, while few others provide intuitive histograms or heuristics to assist in the decision process~\cite{chikhi2013informed}.
+To the best of our knowledge, existing tools leave the best parameter choice to the end user~\cite{peng2010idba, mahadik2017scalable}, while one example KmerGenie provide intuitive histograms or heuristics to assist in the decision process~\cite{chikhi2013informed}.
 % SB (11/3/18): Add one or two more citations that provide such help. 
 % Mus(11/3/18): To our knoweldge, Kmergnie is the one which provides help. Will check again.
-Thus, the need for a data-driven method to select the optimal $k$-value is crucial. 
-\SBcomment{Provide a motivating quantitative result - one value of k good for one dataset gives really bad result with another dataset.} \AMcomment{For example, we found that $k$=25 gives the best performance for D5 using Lighter. However, if the same value of $k$ was used for D1, the Gain drops from 96.3\% (with $k$ = 17) to 69.96\% (See table \ref{tb1:Lighter-Perplexity-vs-Alignment} in APPENDIX).}
+% SB (11/4/18): Resolved. 
+Thus, there is the need for a data-driven method to select the optimal $k$-value is crucial. 
+For example, we found that $k$=25 gives the best EC gain performance for D5 using Lighter. However, if the same value of $k$ was used for D3, the EC gain is only 65\% compared to the optimal $k$ selection gain of 95.34\% (Table \ref{tb1:Lighter-Perplexity-vs-Alignment} in APPENDIX).
+% \SBcomment{Provide a motivating quantitative result - one value of k good for one dataset gives really bad result with another dataset.} \AMcomment{For example, we found that $k$=25 gives the best performance for D5 using Lighter. However, if the same value of $k$ was used for D1, the Gain drops from 96.3\% (with $k$ = 17) to 69.96\% (See table \ref{tb1:Lighter-Perplexity-vs-Alignment} in APPENDIX).}
 Our solution, {\em \name}\footnote{Just as \textit{Athena} is the Greek Goddess of wisdom and a fierce warrior, we wish our technique to unearth the genomic codes underlying disease in a fearless war against maladies.} finds the best value of the configuration parameters
 for correcting errors in genome sequencing, such as the value of $k$ in $k$-mer based methods. Further, \name does not require access to a reference genome to perform its function of determining the optimal parameter configuration\footnote{In our evaluation, we use Bowtie2 to perform alignment and then measure the alignment rate as the metric to evaluate our solution. But alignment is not needed for \name to work.}. 
 % genome to compute the quality of the corrected reads, although we use Bowtie to align against the reference genome for evaluation.
